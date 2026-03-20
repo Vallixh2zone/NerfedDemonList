@@ -100,7 +100,7 @@ export default {
                     </template>
                     <h3>Submission Requirements</h3>
                     <p>
-                    https://docs.google.com/document/d/1Qp-QlGBU0uS4ssh_F_cT69rTP7uhiGGsxJc_68AcZHM/edit?usp=sharing
+                    <a href="https://docs.google.com/document/d/16sG5_3IPdKDBRqeqcuYFX7lBhiN81raWazqgq6hNphU/edit?usp=sharing/" target="_blank">Submission Requirements Doc</a>
                     </p>
                 </div>
             </div>
