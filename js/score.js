@@ -18,19 +18,16 @@ export function score(rank, percent, minPercent) {
         return 0;
     }
 
-    // Old formula
-    /*
-    let score = (100 / Math.sqrt((rank - 1) / 50 + 0.444444) - 50) *
-        ((percent - (minPercent - 1)) / (100 - (minPercent - 1)));
-    */
-    // New formula
-    let score = (-62.49375*Math.pow(rank-1, 0.4) + 500) *
+    // Exponential formula - stronger reward for better ranks, max 500
+    const baseScore = 500 * Math.pow(0.92, Math.pow(rank - 1, 1.1));
+
+    let score = baseScore *
         ((percent - (minPercent - 1)) / (100 - (minPercent - 1)));
 
     score = Math.max(0, score);
 
-    if (percent != 100) {
-        return round(score - score / 3);
+    if (percent !== 100) {
+        return round(score * (2 / 3));
     }
 
     return Math.max(round(score), 0);
