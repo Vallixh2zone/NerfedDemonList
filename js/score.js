@@ -18,8 +18,8 @@ export function score(rank, percent, minPercent) {
         return 0;
     }
 
-    // Exponential formula - stronger reward for better ranks, max 500
-    const baseScore = 500 * Math.pow(0.92, Math.pow(rank - 1, 1.1));
+    // Exponential formula: Rank 1 = 500, Rank 150 = 1
+    const baseScore = 500 * Math.pow(1/500, (rank - 1) / 149);
 
     let score = baseScore *
         ((percent - (minPercent - 1)) / (100 - (minPercent - 1)));
