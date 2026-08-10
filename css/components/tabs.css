@@ -5,7 +5,7 @@
 .tabs .tab{
     border: none;
     cursor: pointer;
-    font: inherit;
+    font: sans-serif;
     padding: 1rem;
     margin: 0;
     background-color: transparent;
