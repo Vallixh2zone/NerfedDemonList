@@ -40,6 +40,22 @@ export default {
                 <div class="level" v-if="level">
                     <h1>{{ level.name }}</h1>
                     <LevelAuthors :author="level.author" :creators="level.creators" :verifier="level.verifier"></LevelAuthors>
+                   <div class="tabs" v-if="level.showcase">
+                       <button 
+                           class="tab" 
+                           :class="{ selected: !toggledShowcase }"
+                           @click="toggledShowcase = false"
+    >
+        Verification
+    </button>
+    <button 
+        class="tab" 
+        :class="{ selected: toggledShowcase }" 
+        @click="toggledShowcase = true"
+    >
+        Showcase
+    </button>
+</div>
                     <iframe class="video" id="videoframe" :src="video" frameborder="0"></iframe>
                     <ul class="stats">
                         <li>
@@ -113,7 +129,8 @@ export default {
         selected: 0,
         errors: [],
         roleIconMap,
-        store
+        store,
+        toggledShowcase: false
     }),
     computed: {
         level() {
