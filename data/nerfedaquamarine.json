@@ -1,42 +1,12 @@
 {
-    "id": 84045965,
+    "id": 146498311,
     "name": "Nerfed Aquamarine",
-    "author": "Soup26",
-    "creators": ["Soup26", "Sincos"],
-    "verifier": "7anman",
-    "verification": "https://www.youtube.com/watch?v=7ov-QnYhlwA",
+    "author": "NEXUSLEGENDGD",
+    "creators": ["NEXUSLEGENDGD", "Sincos"],
+    "verifier": "NEXUSLEGENDGD",
+    "verification": "https://www.youtube.com/watch?v=WFkup00j-u8",
     "percentToQualify": 100,
     "password": "Free to Copy",
     "records": [
-        {
-            "user": "Cesium",
-            "link": "https://www.youtube.com/watch?v=f2BYOd_bCHk",
-            "percent": 100,
-            "hz": 144
-        },   
-        {
-            "user": "macaca",
-            "link": "https://www.youtube.com/watch?v=z67pp7zCdas",
-            "percent": 100,
-            "hz": 240
-        },
-        {
-            "user": "jrpresley08",
-            "link": "https://www.youtube.com/watch?v=DKzsOTfVXtc",
-            "percent": 100,
-            "hz": 260
-        },
-        {
-            "user": "chaseqwe",
-            "link": "https://youtu.be/nVQjEebfZgs",
-            "percent": 100,
-            "hz": 144
-        },
-        {
-            "user": "Jamichi",
-            "link": "https://www.youtube.com/watch?v=UXjhCtFFNF8",
-            "percent": 100,
-            "hz": 144
-        }
     ]
 }
