@@ -3,20 +3,5 @@
         "role": "owner",
         "name": "Cesium",
         "link": "https://www.youtube.com/@cesiumvx"
-    },
-    {
-        "role": "admin",
-        "name": "Cesium",
-        "link": "https://www.youtube.com/@cesiumvx"
-    },
-    {
-        "role": "helper",
-        "name": "Cesium",
-        "link": "https://www.youtube.com/@cesiumvx"
-    },
-    {
-        "role": "dev",
-        "name": "Cesium",
-        "link": "https://www.youtube.com/@cesiumvx"
     }
 ]
