@@ -11,6 +11,7 @@
         {
             "user": "Cesium",
             "link": "https://youtu.be/05_aDbVXQR8",
+            "mobile": true,
             "percent": 100,
             "hz": 144
         },
