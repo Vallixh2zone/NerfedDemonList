@@ -28,3 +28,14 @@
 .tabs .tab:hover{
     background-color: var(--color-background-hover);
 }
+.tab {
+    transition: transform 120ms ease;
+}
+
+.tab:hover {
+    transform: translateY(-2px);
+}
+
+.tab:active {
+    transform: translateY(1px);
+}
