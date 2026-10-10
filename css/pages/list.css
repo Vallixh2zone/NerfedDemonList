@@ -30,16 +30,21 @@
     word-break: normal;
     overflow-wrap: anywhere;
     cursor: pointer;
+    transition: transform 120ms ease, background-color 120ms ease, box-shadow 120ms ease;
 }
-.page-list .list .level.error button {
-    color: var(--color-error);
-    cursor: not-allowed;
-    text-decoration: line-through;
-}
+
 .page-list .list .level button:hover {
     background-color: var(--color-background-hover);
     color: var(--color-on-background-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
+
+.page-list .list .level button:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
 .page-list .list .level.active button {
     background-color: var(--color-primary);
     color: var(--color-on-primary);
