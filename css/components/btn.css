@@ -8,7 +8,7 @@
     color: var(--color-on-primary);
     border-radius: 0.5rem;
     box-shadow: 0 1px 0.5rem 0 rgba(0, 0, 102, 0.5);
-    transition: transform 100ms ease;
+    transition: transform 120ms ease, box-shadow 120ms ease;
 }
 
 .btn:disabled {
@@ -16,6 +16,14 @@
     cursor: not-allowed;
 }
 
-.btn:not(:disabled):hover:not(:active) {
-    transform: translateY(-2px);
+/* Hover – lift up a bit */
+.btn:not(:disabled):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 0.75rem 0 rgba(0, 0, 102, 0.4);
+}
+
+/* Click – press down */
+.btn:not(:disabled):active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 0.3rem 0 rgba(0, 0, 102, 0.3);
 }
