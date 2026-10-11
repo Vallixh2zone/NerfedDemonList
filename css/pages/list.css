@@ -223,3 +223,62 @@ main.dark.page-list .meta-container .meta {
     background: rgba(30, 30, 35, 0.92);
     color: #fff;
 }
+/* Border around the embedded video */
+.page-list .level-container .level .video {
+    border: 3px solid rgba(255, 255, 255, 0.85);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* Make the Verification / Showcase tabs visible */
+.page-list .tabs {
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 8px;
+    padding: 0.25rem;
+    display: inline-flex;
+    gap: 0.25rem;
+    width: fit-content;
+}
+
+.page-list .tabs .tab {
+    background: transparent;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1.1rem;
+    cursor: pointer;
+    transition: background 120ms ease, transform 120ms ease;
+}
+
+.page-list .tabs .tab:hover {
+    background: rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.page-list .tabs .tab.selected {
+    background: #000;
+    color: #fff;
+}
+
+/* Dark mode versions */
+main.dark.page-list .level-container .level .video {
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+main.dark.page-list .tabs {
+    background: rgba(30, 30, 35, 0.92);
+}
+
+main.dark.page-list .tabs .tab {
+    color: #fff;
+}
+
+main.dark.page-list .tabs .tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+main.dark.page-list .tabs .tab.selected {
+    background: #fff;
+    color: #000;
+}
