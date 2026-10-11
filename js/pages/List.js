@@ -45,17 +45,17 @@ export default {
                            class="tab" 
                            :class="{ selected: !toggledShowcase }"
                            @click="toggledShowcase = false"
-    >
-        Verification
-    </button>
-    <button 
-        class="tab" 
-        :class="{ selected: toggledShowcase }" 
-        @click="toggledShowcase = true"
-    >
-        Showcase
-    </button>
-</div>
+                       >
+                           Verification
+                       </button>
+                       <button 
+                           class="tab" 
+                           :class="{ selected: toggledShowcase }" 
+                           @click="toggledShowcase = true"
+                       >
+                           Showcase
+                       </button>
+                   </div>
                     <iframe class="video" id="videoframe" :src="video" frameborder="0"></iframe>
                     <ul class="stats">
                         <li>
@@ -133,34 +133,34 @@ export default {
         toggledShowcase: false
     }),
     computed: {
-    level() {
-        return this.list[this.selected][0];
-    },
-    video() {
-        if (!this.level.showcase) {
-            return embed(this.level.verification);
-        }
+        level() {
+            return this.list[this.selected][0];
+        },
+        video() {
+            if (!this.level.showcase) {
+                return embed(this.level.verification);
+            }
 
-        return embed(
-            this.toggledShowcase
-                ? this.level.showcase
-                : this.level.verification
-        );
+            return embed(
+                this.toggledShowcase
+                    ? this.level.showcase
+                    : this.level.verification
+            );
+        },
+        backgroundStyle() {
+            if (!this.level || !this.level.background) {
+                return {};
+            }
+            return {
+                backgroundImage: `url(${this.level.background})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed',
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: 'transparent'
+            };
+        }
     },
-    // ADD THIS
-    backgroundStyle() {
-    if (!this.level || !this.level.background) {
-        return {};
-    }
-    return {
-        backgroundImage: `url(${this.level.background})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: 'transparent'   // ← important
-    };
-},
     async mounted() {
         // Hide loading spinner
         this.list = await fetchList();
