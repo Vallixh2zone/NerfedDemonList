@@ -136,18 +136,15 @@
 .page-list {
     position: relative;
     transition: background-image 0.4s ease;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+    background-color: transparent !important;   /* overrides the solid color from main.css */
 }
 
-/* Dark overlay so text stays readable */
+/* Soft dark overlay – lighter so content stays readable */
 .page-list::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);   /* adjust darkness here */
+    background: rgba(0, 0, 0, 0.35);   /* lower = lighter overlay */
     pointer-events: none;
     z-index: 0;
 }
