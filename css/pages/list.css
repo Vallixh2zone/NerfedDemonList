@@ -282,20 +282,40 @@ main.dark.page-list .tabs .tab.selected {
     background: #fff;
     color: #000;
 }
-/* Make individual records readable */
+/* Make individual records readable – fixed version */
 .page-list .level-container .level .records {
     background: rgba(255, 255, 255, 0.92);
     border-radius: 10px;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
 .page-list .level-container .level .records .record td {
     color: #000;
+    padding-block: 0.6rem;
+    vertical-align: middle;
 }
 
 .page-list .level-container .level .records .record a {
     color: #000;
+}
+
+.page-list .level-container .level .records .percent {
+    width: 4rem;
+    text-align: end;
+    padding-right: 1rem;
+}
+
+.page-list .level-container .level .records .user {
+    width: 100%;
+}
+
+.page-list .level-container .level .records .hz {
+    width: 5rem;
+    text-align: end;
+    white-space: nowrap;
 }
 
 /* Dark mode */
