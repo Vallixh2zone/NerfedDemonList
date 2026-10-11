@@ -20,7 +20,7 @@ export default {
         <main v-if="loading">
             <Spinner></Spinner>
         </main>
-        <main v-else class="page-list">
+        <main v-else class="page-list" :style="backgroundStyle">
             <div class="list-container">
                 <table class="list" v-if="list">
                     <tr v-for="([level, err], i) in list">
@@ -133,21 +133,34 @@ export default {
         toggledShowcase: false
     }),
     computed: {
-        level() {
-            return this.list[this.selected][0];
-        },
-        video() {
-            if (!this.level.showcase) {
-                return embed(this.level.verification);
-            }
-
-            return embed(
-                this.toggledShowcase
-                    ? this.level.showcase
-                    : this.level.verification
-            );
-        },
+    level() {
+        return this.list[this.selected][0];
     },
+    video() {
+        if (!this.level.showcase) {
+            return embed(this.level.verification);
+        }
+
+        return embed(
+            this.toggledShowcase
+                ? this.level.showcase
+                : this.level.verification
+        );
+    },
+    // ADD THIS
+    backgroundStyle() {
+        if (!this.level || !this.level.background) {
+            return {};
+        }
+        return {
+            backgroundImage: `url(${this.level.background})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+            backgroundRepeat: 'no-repeat'
+        };
+    }
+},
     async mounted() {
         // Hide loading spinner
         this.list = await fetchList();
