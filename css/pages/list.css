@@ -141,15 +141,33 @@
     background-color: transparent !important;
 }
 
+/* Blurred + darkened background layer */
 .page-list::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.35);
-    pointer-events: none;
+    background: inherit;                    /* takes the same background image */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    filter: blur(8px);                      /* blur amount – raise for more blur */
+    transform: scale(1.05);                 /* prevents blur edges from showing */
     z-index: 0;
+    pointer-events: none;
 }
 
+/* Dark overlay on top of the blurred image so text stays readable */
+.page-list::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);        /* darkness – raise for more contrast */
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Keep all content above the background layers */
 .page-list > * {
     position: relative;
     z-index: 1;
