@@ -5,8 +5,10 @@
     "creators": ["ItzNaffy", "xander556"],
     "verifier": "Snurtole",
     "verification": "https://www.youtube.com/watch?v=fcya-maWsxs&t=1s",
+    "showcase": "https://www.youtube.com/watch?v=CjI8B-7ao3I",
     "percentToQualify": 100,
     "password": "Free to Copy",
+    "background": "/assets/backgrounds/nspecbg.png",
     "records": [
         {
             "user": "Dionysus",
