@@ -5,8 +5,10 @@
     "creators": ["NEXUSLEGENDGD", "Sincos"],
     "verifier": "NEXUSLEGENDGD",
     "verification": "https://www.youtube.com/watch?v=WFkup00j-u8",
+    "showcase": "https://www.youtube.com/watch?v=-yDlhj9H7FY",
     "percentToQualify": 100,
     "password": "Free to Copy",
+    "background": "/assets/backgrounds/naquabg.png",
     "records": [
     ]
 }
