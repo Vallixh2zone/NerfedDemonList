@@ -172,3 +172,54 @@
     position: relative;
     z-index: 1;
 }
+/* ===== Readable boxes behind text ===== */
+
+/* Left side rank numbers */
+.page-list .list .rank p {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* Center level info (title, authors, stats, records header) */
+.page-list .level-container .level h1,
+.page-list .level-container .level h2,
+.page-list .level-container .level .level-authors,
+.page-list .level-container .level .stats,
+.page-list .level-container .level > p {
+    background: rgba(255, 255, 255, 0.92);
+    color: #000;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+/* Make the authors block and stats span nicely */
+.page-list .level-container .level .level-authors,
+.page-list .level-container .level .stats {
+    display: grid;          /* keep original layout */
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* Right side meta (editors, requirements, etc.) */
+.page-list .meta-container .meta {
+    background: rgba(255, 255, 255, 0.92);
+    color: #000;
+    padding: 1.25rem;
+    border-radius: 12px;
+}
+
+/* Dark mode versions */
+main.dark.page-list .list .rank p,
+main.dark.page-list .level-container .level h1,
+main.dark.page-list .level-container .level h2,
+main.dark.page-list .level-container .level .level-authors,
+main.dark.page-list .level-container .level .stats,
+main.dark.page-list .level-container .level > p,
+main.dark.page-list .meta-container .meta {
+    background: rgba(30, 30, 35, 0.92);
+    color: #fff;
+}
