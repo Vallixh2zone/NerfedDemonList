@@ -282,3 +282,28 @@ main.dark.page-list .tabs .tab.selected {
     background: #fff;
     color: #000;
 }
+/* Make individual records readable */
+.page-list .level-container .level .records {
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    width: 100%;
+}
+
+.page-list .level-container .level .records .record td {
+    color: #000;
+}
+
+.page-list .level-container .level .records .record a {
+    color: #000;
+}
+
+/* Dark mode */
+main.dark.page-list .level-container .level .records {
+    background: rgba(30, 30, 35, 0.92);
+}
+
+main.dark.page-list .level-container .level .records .record td,
+main.dark.page-list .level-container .level .records .record a {
+    color: #fff;
+}
