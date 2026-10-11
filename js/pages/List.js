@@ -149,17 +149,17 @@ export default {
     },
     // ADD THIS
     backgroundStyle() {
-        if (!this.level || !this.level.background) {
-            return {};
-        }
-        return {
-            backgroundImage: `url(${this.level.background})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
-            backgroundRepeat: 'no-repeat'
-        };
+    if (!this.level || !this.level.background) {
+        return {};
     }
+    return {
+        backgroundImage: `url(${this.level.background})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: 'transparent'   // ← important
+    };
 },
     async mounted() {
         // Hide loading spinner
