@@ -131,3 +131,41 @@
 .page-list .meta .editors li a:hover {
     text-decoration: underline;
 }
+/* ===== Per-level background ===== */
+
+.page-list {
+    position: relative;
+    transition: background-image 0.4s ease;
+}
+
+/* Dark overlay so text stays readable */
+.page-list::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Keep content above the overlay */
+.page-list > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Semi-transparent columns */
+.page-list .list-container,
+.page-list .level-container,
+.page-list .meta-container {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 0.75rem;
+    backdrop-filter: blur(6px);
+}
+
+/* Dark mode columns */
+main.dark.page-list .list-container,
+main.dark.page-list .level-container,
+main.dark.page-list .meta-container {
+    background: rgba(28, 27, 31, 0.85);
+}
