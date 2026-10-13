@@ -149,21 +149,30 @@ export async function fetchLeaderboard() {
 
     playerBoard.sort((a, b) => b.total - a.total);
 
-    // Country leaderboard
+    // Country leaderboard (with top players)
     const countryMap = {};
     playerBoard.forEach((p) => {
         if (!p.country) return;
         countryMap[p.country] ??= {
             country: p.country,
             total: 0,
-            players: 0,
+            players: [],
         };
         countryMap[p.country].total += p.total;
-        countryMap[p.country].players += 1;
+        countryMap[p.country].players.push({
+            user: p.user,
+            total: p.total,
+        });
     });
 
     const countryBoard = Object.values(countryMap)
-        .map((c) => ({ ...c, total: round(c.total) }))
+        .map((c) => ({
+            country: c.country,
+            total: round(c.total),
+            playerCount: c.players.length,
+            // already sorted because playerBoard is sorted by total
+            players: c.players.sort((a, b) => b.total - a.total),
+        }))
         .sort((a, b) => b.total - a.total);
 
     return [playerBoard, countryBoard, errs];
