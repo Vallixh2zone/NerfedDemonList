@@ -21,13 +21,9 @@ export function getThumbnailFromId(id) {
 export function shuffle(array) {
     let currentIndex = array.length, randomIndex;
 
-    // While there remain elements to shuffle.
     while (currentIndex != 0) {
-        // Pick a remaining element.
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
-
-        // And swap it with the current element.
         [array[currentIndex], array[randomIndex]] = [
             array[randomIndex],
             array[currentIndex],
@@ -35,4 +31,18 @@ export function shuffle(array) {
     }
 
     return array;
+}
+
+export function flagUrl(code) {
+    if (!code) return null;
+    return `https://flagcdn.com/20x15/${code.toLowerCase()}.png`;
+}
+
+export function countryName(code) {
+    if (!code) return '';
+    try {
+        return new Intl.DisplayNames(['en'], { type: 'region' }).of(code.toUpperCase());
+    } catch {
+        return code.toUpperCase();
+    }
 }
