@@ -145,20 +145,35 @@ export default {
                     </div>
                 </div>
 
-                <div class="player-container" v-else-if="mode === 'countries' && countryEntry">
-                    <div class="player">
-                        <h1 class="user-with-flag">
-                            <img
-                                class="flag flag-lg"
-                                :src="flagUrl(countryEntry.country)"
-                                :alt="countryEntry.country"
-                            />
-                            #{{ selected + 1 }} {{ countryName(countryEntry.country) }}
-                        </h1>
-                        <h3>{{ countryEntry.total }} points</h3>
-                        <p>{{ countryEntry.players }} player(s) from this country</p>
-                    </div>
-                </div>
+              <div class="player-container" v-else-if="mode === 'countries' && countryEntry">
+    <div class="player">
+        <h1 class="user-with-flag">
+            <img
+                class="flag flag-lg"
+                :src="flagUrl(countryEntry.country)"
+                :alt="countryEntry.country"
+            />
+            #{{ selected + 1 }} {{ countryName(countryEntry.country) }}
+        </h1>
+        <h3>{{ countryEntry.total }} points</h3>
+        <p>{{ countryEntry.playerCount }} player(s) from this country</p>
+
+        <h2>Top players</h2>
+        <table class="table">
+            <tr v-for="(p, i) in countryEntry.players">
+                <td class="rank">
+                    <p>#{{ i + 1 }}</p>
+                </td>
+                <td class="level">
+                    <span class="type-label-lg">{{ p.user }}</span>
+                </td>
+                <td class="score">
+                    <p>{{ localize(p.total) }}</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
             </div>
         </main>
     `,
