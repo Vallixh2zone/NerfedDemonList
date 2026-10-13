@@ -80,7 +80,7 @@ export default {
                                             :alt="centry.country"
                                         />
                                         {{ countryName(centry.country) }}
-                                        <span class="player-count">({{ centry.players }})</span>
+                                        <span class="player-count">({{ centry.playerCount }})</span>
                                     </span>
                                 </button>
                             </td>
