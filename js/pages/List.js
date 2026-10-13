@@ -1,7 +1,7 @@
 import { store } from "../main.js";
-import { embed } from "../util.js";
+import { embed, flagUrl } from "../util.js";
 import { score } from "../score.js";
-import { fetchEditors, fetchList } from "../content.js";
+import { fetchEditors, fetchList, fetchPlayers } from "../content.js";
 
 import Spinner from "../components/Spinner.js";
 import LevelAuthors from "../components/List/LevelAuthors.js";
@@ -81,7 +81,15 @@ export default {
                                 <p>{{ record.percent }}%</p>
                             </td>
                             <td class="user">
-                                <a :href="record.link" target="_blank" class="type-label-lg">{{ record.user }}</a>
+                                <a :href="record.link" target="_blank" class="type-label-lg user-with-flag">
+                                    <img
+                                        v-if="playerCountry(record.user)"
+                                        class="flag"
+                                        :src="flagUrl(playerCountry(record.user))"
+                                        :alt="playerCountry(record.user)"
+                                    />
+                                    {{ record.user }}
+                                </a>
                             </td>
                             <td class="mobile">
                                 <img v-if="record.mobile" :src="\`/assets/phone-landscape\${store.dark ? '-dark' : ''}.svg\`" alt="Mobile">
@@ -125,6 +133,7 @@ export default {
     data: () => ({
         list: [],
         editors: [],
+        players: {},
         loading: true,
         selected: 0,
         errors: [],
@@ -163,6 +172,7 @@ export default {
     async mounted() {
         this.list = await fetchList();
         this.editors = await fetchEditors();
+        this.players = await fetchPlayers();
 
         if (!this.list) {
             this.errors = [
@@ -186,5 +196,13 @@ export default {
     methods: {
         embed,
         score,
+        flagUrl,
+        playerCountry(name) {
+            if (!name || !this.players) return null;
+            const key = Object.keys(this.players).find(
+                (k) => k.toLowerCase() === name.toLowerCase()
+            );
+            return key ? this.players[key] : null;
+        },
     },
 };
