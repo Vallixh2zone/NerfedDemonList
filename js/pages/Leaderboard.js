@@ -1,6 +1,5 @@
 import { fetchLeaderboard } from '../content.js';
-import { localize } from '../util.js';
-
+import { localize, flagUrl, countryName } from '../util.js';
 import Spinner from '../components/Spinner.js';
 
 export default {
@@ -8,9 +7,11 @@ export default {
         Spinner,
     },
     data: () => ({
-        leaderboard: [],
+        playerBoard: [],
+        countryBoard: [],
         loading: true,
         selected: 0,
+        mode: 'players',
         err: [],
     }),
     template: `
@@ -24,9 +25,23 @@ export default {
                         Leaderboard may be incorrect, as the following levels could not be loaded: {{ err.join(', ') }}
                     </p>
                 </div>
+
+                <div class="lb-tabs">
+                    <button
+                        class="tab"
+                        :class="{ selected: mode === 'players' }"
+                        @click="switchMode('players')"
+                    >Players</button>
+                    <button
+                        class="tab"
+                        :class="{ selected: mode === 'countries' }"
+                        @click="switchMode('countries')"
+                    >Countries</button>
+                </div>
+
                 <div class="board-container">
-                    <table class="board">
-                        <tr v-for="(ientry, i) in leaderboard">
+                    <table class="board" v-if="mode === 'players'">
+                        <tr v-for="(ientry, i) in playerBoard">
                             <td class="rank">
                                 <p class="type-label-lg">#{{ i + 1 }}</p>
                             </td>
@@ -35,15 +50,56 @@ export default {
                             </td>
                             <td class="user" :class="{ 'active': selected == i }">
                                 <button @click="selected = i">
-                                    <span class="type-label-lg">{{ ientry.user }}</span>
+                                    <span class="type-label-lg user-with-flag">
+                                        <img
+                                            v-if="ientry.country"
+                                            class="flag"
+                                            :src="flagUrl(ientry.country)"
+                                            :alt="ientry.country"
+                                        />
+                                        {{ ientry.user }}
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="board" v-else>
+                        <tr v-for="(centry, i) in countryBoard">
+                            <td class="rank">
+                                <p class="type-label-lg">#{{ i + 1 }}</p>
+                            </td>
+                            <td class="total">
+                                <p class="type-label-lg">{{ localize(centry.total) }}</p>
+                            </td>
+                            <td class="user" :class="{ 'active': selected == i }">
+                                <button @click="selected = i">
+                                    <span class="type-label-lg user-with-flag">
+                                        <img
+                                            class="flag"
+                                            :src="flagUrl(centry.country)"
+                                            :alt="centry.country"
+                                        />
+                                        {{ countryName(centry.country) }}
+                                        <span class="player-count">({{ centry.players }})</span>
+                                    </span>
                                 </button>
                             </td>
                         </tr>
                     </table>
                 </div>
-                <div class="player-container">
+
+                <div class="player-container" v-if="mode === 'players' && entry">
                     <div class="player">
-                        <h1>#{{ selected + 1 }} {{ entry.user }}</h1>
+                        <h1 class="user-with-flag">
+                            <img
+                                v-if="entry.country"
+                                class="flag flag-lg"
+                                :src="flagUrl(entry.country)"
+                                :alt="entry.country"
+                            />
+                            #{{ selected + 1 }} {{ entry.user }}
+                        </h1>
                         <h3>{{ entry.total }}</h3>
                         <h2 v-if="entry.verified.length > 0">Verified ({{ entry.verified.length}})</h2>
                         <table class="table">
@@ -89,22 +145,46 @@ export default {
                         </table>
                     </div>
                 </div>
+
+                <div class="player-container" v-else-if="mode === 'countries' && countryEntry">
+                    <div class="player">
+                        <h1 class="user-with-flag">
+                            <img
+                                class="flag flag-lg"
+                                :src="flagUrl(countryEntry.country)"
+                                :alt="countryEntry.country"
+                            />
+                            #{{ selected + 1 }} {{ countryName(countryEntry.country) }}
+                        </h1>
+                        <h3>{{ countryEntry.total }} points</h3>
+                        <p>{{ countryEntry.players }} player(s) from this country</p>
+                    </div>
+                </div>
             </div>
         </main>
     `,
     computed: {
         entry() {
-            return this.leaderboard[this.selected];
+            return this.playerBoard[this.selected];
+        },
+        countryEntry() {
+            return this.countryBoard[this.selected];
         },
     },
     async mounted() {
-        const [leaderboard, err] = await fetchLeaderboard();
-        this.leaderboard = leaderboard;
+        const [playerBoard, countryBoard, err] = await fetchLeaderboard();
+        this.playerBoard = playerBoard;
+        this.countryBoard = countryBoard;
         this.err = err;
-        // Hide loading spinner
         this.loading = false;
     },
     methods: {
         localize,
+        flagUrl,
+        countryName,
+        switchMode(mode) {
+            this.mode = mode;
+            this.selected = 0;
+        },
     },
 };
