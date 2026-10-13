@@ -327,3 +327,18 @@ main.dark.page-list .level-container .level .records .record td,
 main.dark.page-list .level-container .level .records .record a {
     color: #fff;
 }
+/* Flags next to record names */
+.user-with-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.flag {
+    width: 20px;
+    height: 15px;
+    object-fit: cover;
+    border-radius: 2px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
