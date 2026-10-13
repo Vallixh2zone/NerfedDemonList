@@ -1,1 +1,14 @@
-
+{
+    "id": 91059275,
+    "name": "Nerfed KOCMOC",
+    "author": "AkayukiGD",
+    "creators": ["AkayukiGD", "cherryteam"],
+    "verifier": "ctyx",
+    "verification": "https://www.youtube.com/watch?v=FS5l5bgFFZ4",
+    "showcase": "https://youtu.be/tnoatxV9QzU",
+    "percentToQualify": 100,
+    "password": "Free to Copy",
+    "background": "/assets/backgrounds/nkocmocbg.png",
+    "records": [
+    ]
+}
