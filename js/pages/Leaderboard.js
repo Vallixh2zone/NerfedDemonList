@@ -27,18 +27,17 @@ export default {
                 </div>
 
                 <div class="lb-tabs">
-                    <button
-                        class="tab"
-                        :class="{ selected: mode === 'players' }"
-                        @click="switchMode('players')"
-                    >Players</button>
-                    <button
-                        class="tab"
-                        :class="{ selected: mode === 'countries' }"
-                        @click="switchMode('countries')"
-                    >Countries</button>
-                </div>
-
+    <button
+        class="tab type-label-lg"
+        :class="{ selected: mode === 'players' }"
+        @click="switchMode('players')"
+    >Players</button>
+    <button
+        class="tab type-label-lg"
+        :class="{ selected: mode === 'countries' }"
+        @click="switchMode('countries')"
+    >Countries</button>
+</div>
                 <div class="board-container">
                     <table class="board" v-if="mode === 'players'">
                         <tr v-for="(ientry, i) in playerBoard">
