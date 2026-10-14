@@ -5,8 +5,10 @@
     "creators": ["ItzNaffy", "TheRealMartini"],
     "verifier": "7anman",
     "verification": "https://youtu.be/iVt7YxWr1Pc?si=jvM3OYvSFwZXCvzc",
+    "showcase": "https://www.youtube.com/watch?v=t1EgvsFc17c",
     "percentToQualify": 100,
     "password": "Free to Copy",
+    "background": "/assets/backgrounds/ndawnbg.png",
     "records": [
         {
             "user": "ctyx",
