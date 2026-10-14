@@ -5,8 +5,10 @@
     "creators": ["AkayukiGD", "icEDCave"],
     "verifier": "Cesium",
     "verification": "https://youtu.be/2fAtqAQixys",
+    "showcase": "https://www.youtube.com/watch?v=Dq7A3B55zoo",
     "percentToQualify": 100,
     "password": "Free to Copy",
+    "background": "/assets/backgrounds/nslhbg.png",
     "records": [
         {
             "user": "7anman",
