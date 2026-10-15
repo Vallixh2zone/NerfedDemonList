@@ -2,15 +2,19 @@
     display: flex;
 }
 
-.tabs .tab{
+.tabs .tab {
     border: none;
     cursor: pointer;
-    font: sans-serif;
+    font-family: "Lexend Deca", sans-serif;
+    font-size: 17.1428571429px;
+    line-height: 20px;
+    font-weight: 500;
     padding: 1rem;
     margin: 0;
     background-color: transparent;
     color: var(--color-on-background);
     border-bottom: 3px solid transparent;
+    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 .tabs .tab:first-child {
@@ -21,13 +25,14 @@
     border-top-right-radius: 0.5rem;
 }
 
-.tabs .tab.selected{
+.tabs .tab.selected {
     border-bottom: 3px solid var(--color-on-background);
 }
 
-.tabs .tab:hover{
+.tabs .tab:hover {
     background-color: var(--color-background-hover);
 }
+
 .tab {
     transition: transform 120ms ease;
 }
