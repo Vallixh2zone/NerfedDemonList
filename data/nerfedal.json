@@ -5,8 +5,10 @@
     "creators": ["AkayukiGD", "Endlevel"],
     "verifier": "Cesium",
     "verification": "https://www.youtube.com/watch?v=GHuTfW4bd34",
+    "showcase": "https://www.youtube.com/watch?v=obRkawBOv9M",
     "percentToQualify": 100,
     "password": "Free to Copy",
+    "background": "/assets/backgrounds/narctbg.png",
     "records": [
     ]
 }
