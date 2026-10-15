@@ -42,14 +42,14 @@ export default {
                     <LevelAuthors :author="level.author" :creators="level.creators" :verifier="level.verifier"></LevelAuthors>
                    <div class="tabs" v-if="level.showcase">
                        <button 
-                           class="tab" 
+                           class="tab type-label-lg" 
                            :class="{ selected: !toggledShowcase }"
                            @click="toggledShowcase = false"
                        >
                            Verification
                        </button>
                        <button 
-                           class="tab" 
+                           class="tab type-label-lg" 
                            :class="{ selected: toggledShowcase }" 
                            @click="toggledShowcase = true"
                        >
