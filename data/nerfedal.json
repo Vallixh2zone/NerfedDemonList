@@ -10,5 +10,11 @@
     "password": "Free to Copy",
     "background": "/assets/backgrounds/narctbg.png",
     "records": [
+        {
+            "user": "Jamichi",
+            "link": "https://www.youtube.com/watch?v=1Um3RBoxz2E",
+            "percent": 100,
+            "hz": 144
+        }
     ]
 }
