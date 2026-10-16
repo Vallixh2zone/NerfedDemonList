@@ -15,6 +15,12 @@
             "link": "https://www.youtube.com/watch?v=b4p_3-ZQciM",
             "percent": 100,
             "hz": 240
+        },
+        {
+            "user": "Cesium",
+            "link": "https://youtu.be/l1dGaD7jfos",
+            "percent": 100,
+            "hz": 144
         }
     ]
 }
