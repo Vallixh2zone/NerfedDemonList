@@ -184,3 +184,58 @@
     text-transform: uppercase;
     background-color: var(--color-background);
 }
+
+/* ---- Uniform text on the Submit, Review and Account pages ---- */
+.page-account {
+    font-size: 17.1428571429px;
+    line-height: 24px;
+}
+/* Section titles: one size everywhere (the page title stays the big h1). */
+.page-account h2 {
+    font-size: 22.8571428571px;
+    line-height: 28px;
+    letter-spacing: 0;
+}
+/* Inputs, dropdowns and buttons match the site's label text. */
+.page-account input:not([type='checkbox']),
+.page-account select,
+.page-account textarea,
+.page-account .account-btn {
+    font-size: 17.1428571429px;
+    line-height: 20px;
+}
+.page-account input:not([type='checkbox']),
+.page-account select,
+.page-account textarea {
+    font-weight: 500;
+}
+.page-account .account-btn {
+    font-weight: 700;
+}
+/* Checkbox and form labels read like normal text. */
+.page-account label span:not(.type-label-md) {
+    font-size: 17.1428571429px;
+    line-height: 24px;
+}
+/* Tables: headers look like the site's small uppercase titles, cells like body text. */
+.page-account .account-table th {
+    font-size: 14.2857142857px;
+    line-height: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+.page-account .account-table td {
+    font-size: 17.1428571429px;
+    line-height: 24px;
+}
+.page-account .account-link {
+    font-weight: 700;
+}
+.page-account strong {
+    font-weight: 700;
+}
+.page-account .account-card > h2 + p.type-label-md,
+.page-account .account-card p.type-label-md {
+    opacity: 0.8;
+}
