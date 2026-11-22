@@ -1,3 +1,5 @@
+import { COUNTRY_CODES } from '../../js/countries.js';
+
 // Shared helpers for the account system (Cloudflare Pages Functions).
 // This file exports no onRequest handlers, so it does not create a route.
 
@@ -238,14 +240,5 @@ export function publicUser(u) {
 export function cleanCountry(value) {
     if (value === '' || value == null) return '';
     const code = String(value).toLowerCase();
-    if (!/^[a-z]{2}$/.test(code)) return null;
-    // Region groups / placeholders, not countries.
-    if (['eu', 'ez', 'un', 'qo', 'xa', 'xb', 'zz'].includes(code)) return null;
-    try {
-        const name = new Intl.DisplayNames(['en'], { type: 'region' }).of(code.toUpperCase());
-        if (!name || name.toUpperCase() === code.toUpperCase()) return null;
-    } catch {
-        return null;
-    }
-    return code;
+    return COUNTRY_CODES.includes(code) ? code : null;
 }

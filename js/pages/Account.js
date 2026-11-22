@@ -1,27 +1,14 @@
 import { store } from '../main.js';
 import { session, api, login, logout, loadSession } from '../auth.js';
 import { flagUrl } from '../util.js';
+import { COUNTRY_CODES } from '../countries.js';
 import Spinner from '../components/Spinner.js';
 
-// Every 2-letter code the browser knows a country name for, sorted by name.
+// Official country list, sorted by name.
 function countryList() {
     const names = new Intl.DisplayNames(['en'], { type: 'region' });
-    const out = [];
-    for (let a = 65; a <= 90; a++) {
-        for (let b = 65; b <= 90; b++) {
-            const code = String.fromCharCode(a, b);
-            let name;
-            try {
-                name = names.of(code);
-            } catch {
-                continue;
-            }
-            if (name && name !== code && !/^(EU|EZ|UN|QO|XA|XB|ZZ)$/.test(code)) {
-                out.push({ code: code.toLowerCase(), name });
-            }
-        }
-    }
-    return out.sort((x, y) => x.name.localeCompare(y.name));
+    return COUNTRY_CODES.map((code) => ({ code, name: names.of(code.toUpperCase()) }))
+        .sort((x, y) => x.name.localeCompare(y.name));
 }
 
 export default {
