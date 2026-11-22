@@ -1,4 +1,5 @@
 import routes from './routes.js';
+import { session, loadSession, login, logout } from './auth.js';
 
 export const store = Vue.reactive({
     dark: JSON.parse(localStorage.getItem('dark')) || false,
@@ -9,7 +10,8 @@ export const store = Vue.reactive({
 });
 
 const app = Vue.createApp({
-    data: () => ({ store }),
+    data: () => ({ store, session }),
+    methods: { login, logout },
 });
 const router = VueRouter.createRouter({
     history: VueRouter.createWebHashHistory(),
@@ -19,3 +21,4 @@ const router = VueRouter.createRouter({
 app.use(router);
 
 app.mount('#app');
+loadSession();

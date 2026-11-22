@@ -5,8 +5,45 @@ import { round, score } from './score.js';
  */
 const dir = '/data';
 
+/**
+ * Records accepted through the website's account system (stored in D1).
+ * Returns {} if the backend isn't available (e.g. running the site locally).
+ */
+let accountRecordsPromise = null;
+export function fetchAccountRecords() {
+    accountRecordsPromise ??= fetch('/api/records')
+        .then((res) => (res.ok ? res.json() : { records: [] }))
+        .then(({ records }) => {
+            const byLevel = {};
+            for (const r of records || []) {
+                (byLevel[r.level] ??= []).push({
+                    user: r.user,
+                    link: r.link,
+                    percent: r.percent,
+                    hz: r.hz,
+                    mobile: r.mobile,
+                });
+            }
+            return byLevel;
+        })
+        .catch(() => ({}));
+    return accountRecordsPromise;
+}
+
+/** One record per player per level: keep the best percent (JSON wins ties). */
+function mergeRecords(jsonRecords, accountRecords) {
+    const best = new Map();
+    for (const r of [...(jsonRecords || []), ...(accountRecords || [])]) {
+        const key = String(r.user).toLowerCase();
+        const cur = best.get(key);
+        if (!cur || r.percent > cur.percent) best.set(key, r);
+    }
+    return [...best.values()];
+}
+
 export async function fetchList() {
     const listResult = await fetch(`${dir}/_list.json`);
+    const accountRecords = await fetchAccountRecords();
     try {
         const list = await listResult.json();
         return await Promise.all(
@@ -18,7 +55,10 @@ export async function fetchList() {
                         {
                             ...level,
                             path,
-                            records: level.records.sort(
+                            records: mergeRecords(
+                                level.records,
+                                accountRecords[path],
+                            ).sort(
                                 (a, b) => b.percent - a.percent,
                             ),
                         },

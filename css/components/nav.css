@@ -52,3 +52,24 @@
 .nav .nav__actions .nav__cta:hover:not(:active) {
     transform: translateY(-2px);
 }
+
+.nav .nav__actions .nav__tab--small {
+    height: 100%;
+    margin-left: 1rem;
+}
+.nav .nav__actions .nav__account {
+    margin-left: 1rem;
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+    color: var(--color-on-primary);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    max-width: 14rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.nav .nav__actions .nav__account:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}

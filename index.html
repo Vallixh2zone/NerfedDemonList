@@ -23,6 +23,7 @@
             href="/css/pages/leaderboard.css"
         />
         <link rel="stylesheet" type="text/css" href="/css/pages/roulette.css" />
+        <link rel="stylesheet" type="text/css" href="/css/pages/account.css" />
         <link rel="stylesheet" type="text/css" href="/css/components/nav.css" />
         <link rel="stylesheet" type="text/css" href="/css/components/btn.css" />
         <link
@@ -64,12 +65,30 @@
                     <a class="nav__icon" href="https://discord.gg/M2KkGySwPG">
                         <img src="/assets/discord.svg" alt="Discord Logo" />
                     </a>
-                    <!-- List record submission form, add a link to replace the '#' when putting a link to your list submission form-->
-                    <a
-                        class="nav__cta type-label-lg"
-                        href="https://docs.google.com/forms/d/e/1FAIpQLScdwniT4WXUuvROt7rkA5MK0dJXOE-weURX6t3orBYPZFFzQA/viewform?usp=dialog"
-                        target="_blank"
-                        >Submit Record</a
+                    <router-link
+                        v-if="session.user && session.user.staff"
+                        class="nav__tab nav__tab--small"
+                        to="/review"
+                    >
+                        <span class="type-label-lg">Review</span>
+                    </router-link>
+                    <button
+                        v-if="session.user"
+                        class="nav__account type-label-md"
+                        @click.prevent="logout()"
+                        :title="'Logged in with Discord as ' + session.user.discordUsername"
+                    >
+                        {{ session.user.name || session.user.discordUsername }} · Log out
+                    </button>
+                    <button
+                        v-else-if="session.loaded"
+                        class="nav__account type-label-md"
+                        @click.prevent="login()"
+                    >
+                        Log in
+                    </button>
+                    <router-link class="nav__cta type-label-lg" to="/submit"
+                        >Submit Record</router-link
                     >
                 </div>
             </nav>
