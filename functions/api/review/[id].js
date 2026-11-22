@@ -2,14 +2,16 @@ import {
     checkWriteRequest,
     cleanText,
     error,
+    getLevel,
     getUser,
     json,
     now,
     readJson,
 } from '../../_lib/server.js';
+import { notifyReview } from '../../_lib/discord.js';
 
 // POST /api/review/:id { action: "accept" | "reject" | "reopen", reason? }
-export async function onRequestPost({ request, env, params }) {
+export async function onRequestPost({ request, env, params, waitUntil }) {
     const bad = checkWriteRequest(request);
     if (bad) return bad;
     const user = await getUser(request, env);
@@ -44,6 +46,23 @@ export async function onRequestPost({ request, env, params }) {
         .bind(status, reason, user.id, now(), id)
         .run();
     if (!result.meta.changes) return error('Submission not found', 404);
+
+    // Post the result to Discord in the background (doesn't slow down the review page).
+    if (status !== 'pending') {
+        const s = await env.DB.prepare(
+            `SELECT s.*, u.name AS player, u.discord_id FROM submissions s JOIN users u ON u.id = s.user_id WHERE s.id = ?`,
+        )
+            .bind(id)
+            .first();
+        const level = await getLevel(env, request, s.level).catch(() => null);
+        waitUntil(
+            notifyReview(env, {
+                ...s,
+                levelName: level?.data?.name || s.level,
+                reviewer: user.name || user.discord_username,
+            }),
+        );
+    }
 
     return json({ ok: true });
 }

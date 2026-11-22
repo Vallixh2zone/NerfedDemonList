@@ -62,3 +62,16 @@ after pushing, use **Deployments → Retry deployment**.
 - Video links must be https links on YouTube, Medal, Twitch, Streamable, Google Drive, or Bilibili.
 - Limits: 10 pending records per player, 20 submissions per day, no duplicate pending record for the same level,
   and no submitting a record that isn't better than one you already have accepted.
+
+## Discord review notifications (optional)
+When a mod accepts or rejects a record, the bot posts the result to a channel.
+Add these in Cloudflare → Settings → Variables and Secrets, then redeploy:
+
+| Name | Type | Value |
+|---|---|---|
+| `DISCORD_BOT_TOKEN` | **Secret** | Discord Developer Portal → your app → Bot → Reset Token |
+| `DISCORD_CHANNEL_ID` | Text | right-click the channel (Developer Mode on) → Copy Channel ID |
+
+The bot needs to be in your server with **View Channel**, **Send Messages** and **Embed Links** in that channel.
+The player who submitted the record gets pinged, but only if they are in the server.
+If you don't set these, reviewing still works and nothing gets posted.
