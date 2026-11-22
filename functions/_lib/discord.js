@@ -46,8 +46,8 @@ export async function notifyReview(env, s) {
     if (s.reason) fields.push(field(`Staff Comment — ${s.reviewer}`, s.reason, false));
     fields.push(field('Reviewed By', s.reviewer, false));
 
-    // Ping the player, but only if they're actually in the server (bot mode only).
-    const ping = useBot && (await isInServer(env, s.discord_id)) ? String(s.discord_id) : null;
+    // Ping the player if they allow it and are actually in the server (bot mode only).
+    const ping = useBot && s.ping_on_review !== 0 && (await isInServer(env, s.discord_id)) ? String(s.discord_id) : null;
 
     const payload = {
         content: ping ? `<@${ping}>` : undefined,

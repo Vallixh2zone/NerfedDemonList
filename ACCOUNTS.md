@@ -75,3 +75,15 @@ Add these in Cloudflare → Settings → Variables and Secrets, then redeploy:
 The bot needs to be in your server with **View Channel**, **Send Messages** and **Embed Links** in that channel.
 The player who submitted the record gets pinged, but only if they are in the server.
 If you don't set these, reviewing still works and nothing gets posted.
+
+## Account page (`#/account`)
+Click your name in the top bar. Players can:
+- **Change their country** (flag next to their name on the List and Leaderboard). It overrides `_players.json` for that player.
+- **Show or hide their Discord profile picture** on the leaderboard.
+- **Turn Discord pings for review results on or off.**
+- **Request a name change.** A mod approves or denies it under Review → Names. The player's site records move
+  to the new name automatically. Records in `data/*.json` don't, so rename those by hand (the Review page warns you).
+  Changing only capital letters is instant. One change every 30 days.
+- **Log out**, or log out on all devices.
+
+If you set the site up before the account page existed, run `migration-2-account-page.sql` once in the D1 Console.

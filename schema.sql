@@ -9,7 +9,14 @@ CREATE TABLE IF NOT EXISTS users (
     name_lower       TEXT    UNIQUE,             -- for case-insensitive uniqueness
     name_verified    INTEGER NOT NULL DEFAULT 1, -- 0 = claims a name already on the list, needs a mod
     banned           INTEGER NOT NULL DEFAULT 0,
-    created_at       INTEGER NOT NULL
+    created_at       INTEGER NOT NULL,
+    country          TEXT,                       -- 2-letter code, e.g. "us"
+    discord_avatar   TEXT,                       -- Discord avatar hash
+    show_avatar      INTEGER NOT NULL DEFAULT 1,
+    ping_on_review   INTEGER NOT NULL DEFAULT 1,
+    pending_name     TEXT,                       -- requested new name, waiting for a mod
+    pending_name_at  INTEGER,
+    name_changed_at  INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS sessions (

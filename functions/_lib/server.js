@@ -185,3 +185,67 @@ export async function getExistingNames(env, request) {
 }
 
 export const NAME_RE = /^[A-Za-z0-9_.\- ]{2,24}$/;
+
+export const NAME_COOLDOWN_DAYS = 30;
+
+export function cleanName(value) {
+    return String(value || '').trim().replace(/\s+/g, ' ');
+}
+
+/**
+ * Checks a name can be used by this user.
+ * Returns { error } or { onList } (onList = the name already has records in the JSON files).
+ */
+export async function checkName(env, request, name, userId) {
+    if (!NAME_RE.test(name)) {
+        return { error: 'Names must be 2–24 characters: letters, numbers, spaces, _ - .' };
+    }
+    const lower = name.toLowerCase();
+    const taken = await env.DB.prepare(
+        `SELECT id FROM users WHERE id != ? AND (name_lower = ? OR lower(pending_name) = ?)`,
+    )
+        .bind(userId, lower, lower)
+        .first();
+    if (taken) return { error: 'That name is already taken by another account.' };
+    const existing = await getExistingNames(env, request);
+    return { onList: existing.has(lower) };
+}
+
+export function avatarUrl(u) {
+    if (!u.show_avatar || !u.discord_avatar || !/^\d+$/.test(String(u.discord_id))) return null;
+    const ext = u.discord_avatar.startsWith('a_') ? 'gif' : 'png';
+    return `https://cdn.discordapp.com/avatars/${u.discord_id}/${u.discord_avatar}.${ext}?size=128`;
+}
+
+export function publicUser(u) {
+    const changedAt = u.name_changed_at || 0;
+    return {
+        name: u.name,
+        nameVerified: !!u.name_verified,
+        discordUsername: u.discord_username,
+        staff: !!u.staff,
+        banned: !!u.banned,
+        country: u.country || null,
+        avatar: avatarUrl({ ...u, show_avatar: 1 }),
+        showAvatar: !!u.show_avatar,
+        pingOnReview: !!u.ping_on_review,
+        pendingName: u.pending_name || null,
+        nextNameChange: changedAt ? changedAt + NAME_COOLDOWN_DAYS * 86400 : null,
+    };
+}
+
+/** Valid 2-letter country code (lower case), '' to clear, or null if invalid. */
+export function cleanCountry(value) {
+    if (value === '' || value == null) return '';
+    const code = String(value).toLowerCase();
+    if (!/^[a-z]{2}$/.test(code)) return null;
+    // Region groups / placeholders, not countries.
+    if (['eu', 'ez', 'un', 'qo', 'xa', 'xb', 'zz'].includes(code)) return null;
+    try {
+        const name = new Intl.DisplayNames(['en'], { type: 'region' }).of(code.toUpperCase());
+        if (!name || name.toUpperCase() === code.toUpperCase()) return null;
+    } catch {
+        return null;
+    }
+    return code;
+}

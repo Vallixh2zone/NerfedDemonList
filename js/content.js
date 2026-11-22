@@ -86,13 +86,39 @@ export async function fetchEditors() {
     }
 }
 
+/**
+ * Public profiles from the account system: { "lowercase name": { name, country, avatar } }.
+ * Returns {} if the backend isn't available.
+ */
+let profilesPromise = null;
+export function fetchProfiles() {
+    profilesPromise ??= fetch('/api/players')
+        .then((res) => (res.ok ? res.json() : { players: [] }))
+        .then(({ players }) => {
+            const map = {};
+            for (const p of players || []) map[p.name.toLowerCase()] = p;
+            return map;
+        })
+        .catch(() => ({}));
+    return profilesPromise;
+}
+
+/** { name: countryCode } — _players.json, overridden by what players set on their Account page. */
 export async function fetchPlayers() {
+    let players = {};
     try {
         const res = await fetch(`${dir}/_players.json`);
-        return await res.json();
-    } catch {
-        return {};
+        players = await res.json();
+    } catch {}
+    const profiles = await fetchProfiles();
+    for (const p of Object.values(profiles)) {
+        if (!p.country) continue;
+        for (const key of Object.keys(players)) {
+            if (key.toLowerCase() === p.name.toLowerCase()) delete players[key];
+        }
+        players[p.name] = p.country;
     }
+    return players;
 }
 
 function getCountry(players, name) {
@@ -106,6 +132,7 @@ function getCountry(players, name) {
 export async function fetchLeaderboard() {
     const list = await fetchList();
     const players = await fetchPlayers();
+    const profiles = await fetchProfiles();
 
     const scoreMap = {};
     const errs = [];
@@ -182,6 +209,7 @@ export async function fetchLeaderboard() {
         return {
             user,
             country: getCountry(players, user),
+            avatar: profiles[user.toLowerCase()]?.avatar || null,
             total: round(total),
             ...scores,
         };

@@ -50,7 +50,7 @@ export async function onRequestPost({ request, env, params, waitUntil }) {
     // Post the result to Discord in the background (doesn't slow down the review page).
     if (status !== 'pending') {
         const s = await env.DB.prepare(
-            `SELECT s.*, u.name AS player, u.discord_id FROM submissions s JOIN users u ON u.id = s.user_id WHERE s.id = ?`,
+            `SELECT s.*, u.name AS player, u.discord_id, u.ping_on_review FROM submissions s JOIN users u ON u.id = s.user_id WHERE s.id = ?`,
         )
             .bind(id)
             .first();

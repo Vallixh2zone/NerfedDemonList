@@ -92,6 +92,13 @@ export default {
                     <div class="player">
                         <h1 class="user-with-flag">
                             <img
+                                v-if="entry.avatar"
+                                class="avatar"
+                                :src="entry.avatar"
+                                alt=""
+                                referrerpolicy="no-referrer"
+                            />
+                            <img
                                 v-if="entry.country"
                                 class="flag flag-lg"
                                 :src="flagUrl(entry.country)"

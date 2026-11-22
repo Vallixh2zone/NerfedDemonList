@@ -49,6 +49,7 @@ export default {
                         <h1>Submit a record</h1>
                         <p class="type-label-md">Submitting as <strong>{{ session.user.name }}</strong>
                             <button v-if="!submissions.length" class="account-link" @click="startEditName">change</button>
+                            <router-link v-else to="/account" class="account-link">change</router-link>
                         </p>
                         <p>Read the <a href="https://docs.google.com/document/d/16sG5_3IPdKDBRqeqcuYFX7lBhiN81raWazqgq6hNphU/edit?usp=sharing" target="_blank" rel="noopener">submission requirements</a> first.</p>
 

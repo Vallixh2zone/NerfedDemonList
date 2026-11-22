@@ -29,7 +29,7 @@ export default {
                     <p class="account-error" v-if="error">{{ error }}</p>
                     <div class="tabs">
                         <button class="tab type-label-lg" :class="{ selected: tab === 'pending' }" @click="tab = 'pending'">Pending ({{ pending.length }})</button>
-                        <button class="tab type-label-lg" :class="{ selected: tab === 'claims' }" @click="tab = 'claims'">Names to confirm ({{ claims.length }})</button>
+                        <button class="tab type-label-lg" :class="{ selected: tab === 'claims' }" @click="tab = 'claims'">Names ({{ claims.length + renames.length }})</button>
                         <button class="tab type-label-lg" :class="{ selected: tab === 'recent' }" @click="tab = 'recent'">Recently reviewed</button>
                     </div>
 
@@ -58,6 +58,19 @@ export default {
                     </template>
 
                     <template v-if="tab === 'claims'">
+                        <h2 v-if="renames.length">Name change requests</h2>
+                        <section v-for="u in renames" :key="'r' + u.id" class="account-card">
+                            <h2>{{ u.name }} → {{ u.pending_name }}</h2>
+                            <p class="type-label-md">Discord: {{ u.discord_username }} (ID {{ u.discord_id }}) · {{ u.accepted }} accepted record(s) on the site · asked {{ ago(u.pending_name_at) }}</p>
+                            <p v-if="u.newNameOnList" class="account-error">⚠ "{{ u.pending_name }}" already has records in the list files. Only approve if this account really is that player.</p>
+                            <p v-if="u.oldNameOnList" class="account-error">⚠ "{{ u.name }}" has records in the list files (data/*.json). Those won't move automatically. Rename them in the files too if you approve.</p>
+                            <div class="account-row">
+                                <button class="account-btn" :disabled="busy" @click="userAction(u.id, 'approve-rename')">Approve</button>
+                                <button class="account-btn account-btn--danger" :disabled="busy" @click="userAction(u.id, 'deny-rename')">Deny</button>
+                            </div>
+                        </section>
+
+                        <h2>New accounts claiming a name</h2>
                         <p class="account-card">These accounts picked a name that already has records on the list. Only confirm if you know the Discord account belongs to that player.</p>
                         <section v-for="u in claims" :key="u.id" class="account-card">
                             <h2>{{ u.name }}</h2>
@@ -98,6 +111,7 @@ export default {
         tab: 'pending',
         pending: [],
         claims: [],
+        renames: [],
         recent: [],
         reasons: {},
         levels: {},

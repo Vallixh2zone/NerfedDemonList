@@ -1,4 +1,4 @@
-import { error, getUser, json } from '../../_lib/server.js';
+import { error, getExistingNames, getUser, json } from '../../_lib/server.js';
 
 // GET /api/review → everything a mod needs: pending records, names to confirm, recent decisions
 export async function onRequestGet({ request, env }) {
@@ -6,7 +6,7 @@ export async function onRequestGet({ request, env }) {
     if (!user) return error('Not logged in', 401);
     if (!user.staff) return error('Mods only', 403);
 
-    const [pending, claims, recent] = await env.DB.batch([
+    const [pending, claims, recent, renames] = await env.DB.batch([
         env.DB.prepare(
             `SELECT s.*, u.name AS user, u.discord_username, u.discord_id
              FROM submissions s JOIN users u ON u.id = s.user_id
@@ -27,11 +27,26 @@ export async function onRequestGet({ request, env }) {
              WHERE s.status != 'pending'
              ORDER BY s.reviewed_at DESC LIMIT 50`,
         ),
+        env.DB.prepare(
+            `SELECT u.id, u.name, u.pending_name, u.pending_name_at, u.discord_username, u.discord_id,
+                    (SELECT COUNT(*) FROM submissions WHERE user_id = u.id AND status = 'accepted') AS accepted
+             FROM users u
+             WHERE u.pending_name IS NOT NULL AND u.banned = 0
+             ORDER BY u.pending_name_at ASC`,
+        ),
     ]);
+
+    // Flag renames that touch names already in the JSON files.
+    const onList = renames.results.length ? await getExistingNames(env, request) : new Set();
 
     return json({
         pending: pending.results,
         claims: claims.results,
         recent: recent.results,
+        renames: renames.results.map((r) => ({
+            ...r,
+            newNameOnList: onList.has(r.pending_name.toLowerCase()),
+            oldNameOnList: onList.has(String(r.name).toLowerCase()),
+        })),
     });
 }

@@ -56,10 +56,17 @@ export async function onRequestGet({ request, env }) {
 
     const t = now();
     await env.DB.prepare(
-        `INSERT INTO users (discord_id, discord_username, created_at) VALUES (?, ?, ?)
-         ON CONFLICT(discord_id) DO UPDATE SET discord_username = excluded.discord_username`,
+        `INSERT INTO users (discord_id, discord_username, discord_avatar, created_at) VALUES (?, ?, ?, ?)
+         ON CONFLICT(discord_id) DO UPDATE SET
+            discord_username = excluded.discord_username,
+            discord_avatar = excluded.discord_avatar`,
     )
-        .bind(String(me.id), String(me.username || '').slice(0, 64), t)
+        .bind(
+            String(me.id),
+            String(me.username || '').slice(0, 64),
+            /^(a_)?[0-9a-f]{32}$/.test(me.avatar || '') ? me.avatar : null,
+            t,
+        )
         .run();
     const user = await env.DB.prepare('SELECT id, banned FROM users WHERE discord_id = ?')
         .bind(String(me.id))
