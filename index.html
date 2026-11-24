@@ -30,6 +30,7 @@
         />
         <link rel="stylesheet" type="text/css" href="/css/pages/roulette.css" />
         <link rel="stylesheet" type="text/css" href="/css/pages/account.css" />
+        <link rel="stylesheet" type="text/css" href="/css/pages/home.css" />
         <link rel="stylesheet" type="text/css" href="/css/components/nav.css" />
         <link rel="stylesheet" type="text/css" href="/css/components/btn.css" />
         <link
@@ -45,10 +46,13 @@
         <header :class="{ dark: store.dark }">
             <div class="logo">
                 <h2>NDL</h2>
-                <p>v2.0.4</p>
+                <p>v2.0.3</p>
             </div>
             <nav class="nav">
                 <router-link class="nav__tab" to="/">
+                    <span class="type-label-lg">Home</span>
+                </router-link>
+                <router-link class="nav__tab" to="/list">
                     <span class="type-label-lg">List</span>
                 </router-link>
                 <router-link class="nav__tab" to="/leaderboard">

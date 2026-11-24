@@ -1,0 +1,254 @@
+/* =====================================================================
+   Home page
+   ===================================================================== */
+
+.page-home {
+    display: block;
+    overflow-y: auto;
+}
+
+.home {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 3.5rem 2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+/* ---------- Intro + Top 5 ---------- */
+
+.home-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: center;
+}
+
+.home-title {
+    font-size: 76px;
+    line-height: 74px;
+    font-weight: 800;
+    letter-spacing: -3px;
+    color: var(--ink);
+}
+
+.home-lede {
+    margin-top: 2.75rem;
+    max-width: 32rem;
+    font-size: 20px;
+    line-height: 32px;
+    color: var(--muted);
+}
+
+.home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    height: 3.25rem;
+    padding: 0 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 17px;
+    font-weight: 700;
+    transition: background-color var(--fast) var(--ease), border-color var(--fast) var(--ease),
+        transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
+}
+.home-btn:hover {
+    border-color: var(--accent);
+    background: var(--surface-solid);
+}
+.home-btn:active {
+    transform: translateY(1px);
+}
+.home-btn--primary {
+    background: var(--accent-fill);
+    border-color: var(--accent-fill);
+    color: var(--on-accent);
+    box-shadow: 0 6px 18px var(--accent-glow);
+}
+.home-btn--primary:hover {
+    background: var(--accent-fill-hover);
+    border-color: var(--accent-fill-hover);
+}
+
+.home-note {
+    margin-top: 1.5rem;
+    color: var(--muted);
+}
+.home-note a {
+    color: var(--accent);
+    font-weight: 700;
+}
+.home-note a:hover {
+    text-decoration: underline;
+}
+
+/* Top 5 panel */
+.home-top {
+    padding: 1.75rem;
+}
+.home-top h2 {
+    font-size: 22px;
+    line-height: 28px;
+    letter-spacing: -0.3px;
+    margin-bottom: 0.75rem;
+}
+.home-top__list {
+    display: flex;
+    flex-direction: column;
+}
+.home-top__list li + li {
+    border-top: 1px solid var(--line);
+}
+.home-top__list li {
+    animation: top-in 460ms var(--ease) both;
+    animation-delay: calc(var(--i, 0) * 70ms + 120ms);
+}
+@keyframes top-in {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+}
+
+.home-top__row {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 0.6rem;
+    margin-inline: -0.6rem;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--fast) var(--ease);
+}
+.home-top__row:hover {
+    background: var(--surface-2);
+}
+.home-top__rank {
+    font-size: 28px;
+    line-height: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    text-align: center;
+}
+.home-top__name {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+.home-top__name small {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+}
+.home-top__pts {
+    font-size: 15px;
+    color: var(--muted);
+    white-space: nowrap;
+}
+.home-top__row:hover .home-top__pts {
+    color: var(--accent);
+}
+
+/* Placeholder rows while the list loads */
+.home-top__list--loading li {
+    padding: 1.1rem 0;
+    animation: none;
+}
+.home-top__ghost {
+    display: block;
+    height: 1.4rem;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--surface-2), var(--line), var(--surface-2));
+    background-size: 200% 100%;
+    animation: ghost 1.2s linear infinite;
+}
+@keyframes ghost {
+    to {
+        background-position: -200% 0;
+    }
+}
+
+.home-top__all {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--accent);
+    font-weight: 700;
+}
+.home-top__all:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Sections ---------- */
+
+.home-features {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    overflow: hidden;
+}
+.home-feature {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 1.5rem;
+    transition: background-color var(--fast) var(--ease);
+}
+.home-feature + .home-feature {
+    border-left: 1px solid var(--line);
+}
+.home-feature:hover {
+    background: var(--surface-2);
+}
+.home-feature h3 {
+    font-size: 18px;
+    line-height: 24px;
+    transition: color var(--fast) var(--ease);
+}
+.home-feature:hover h3 {
+    color: var(--accent);
+}
+.home-feature p {
+    font-size: 15px;
+    line-height: 23px;
+    color: var(--muted);
+}
+
+.home-credit {
+    text-align: center;
+    font-size: 14px;
+    color: var(--muted);
+}
+.home-credit a {
+    color: var(--accent);
+}
+.home-credit a:hover {
+    text-decoration: underline;
+}
+
+/* Narrower windows: stack the intro above the Top 5 */
+@media screen and (max-width: 1100px) {
+    .home-hero {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .home-features {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .home-feature:nth-child(3) {
+        border-left: none;
+    }
+    .home-feature:nth-child(n + 3) {
+        border-top: 1px solid var(--line);
+    }
+}

@@ -156,7 +156,20 @@ export default {
             }
         }
 
+        // Opened from the home page's Top 5 (e.g. /list?level=3): select that level.
+        const wanted = Number(this.$route.query.level);
+        const jump = this.list && Number.isInteger(wanted) && wanted >= 1 && wanted <= this.list.length;
+        if (jump) this.selected = wanted - 1;
+
         this.loading = false;
+
+        if (jump) {
+            this.$nextTick(() => {
+                document
+                    .querySelector('.page-list .list .level.active')
+                    ?.scrollIntoView({ block: 'center' });
+            });
+        }
     },
     methods: {
         embed,
