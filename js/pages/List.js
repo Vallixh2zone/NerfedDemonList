@@ -20,7 +20,7 @@ export default {
         <main v-if="loading">
             <Spinner></Spinner>
         </main>
-        <main v-else class="page-list" :style="backgroundStyle">
+        <main v-else class="page-list">
             <div class="list-container">
                 <table class="list" v-if="list">
                     <tr v-for="([level, err], i) in list">
@@ -37,7 +37,8 @@ export default {
                 </table>
             </div>
             <div class="level-container">
-                <div class="level" v-if="level">
+                <transition name="swap" mode="out-in">
+                <div class="level panel" v-if="level" :key="selected">
                     <h1>{{ level.name }}</h1>
                     <LevelAuthors :author="level.author" :creators="level.creators" :verifier="level.verifier"></LevelAuthors>
                     <iframe class="video" id="videoframe" :src="video" frameborder="0"></iframe>
@@ -60,7 +61,7 @@ export default {
                     <p v-else-if="selected +1 <= 150"><strong>100%</strong> or better to qualify</p>
                     <p v-else>This level does not accept new records.</p>
                     <table class="records">
-                        <tr v-for="record in level.records" class="record">
+                        <tr v-for="record in level.records" class="record" :class="{ 'record--complete': record.percent === 100 }">
                             <td class="percent">
                                 <p>{{ record.percent }}%</p>
                             </td>
@@ -83,13 +84,18 @@ export default {
                             </td>
                         </tr>
                     </table>
+                    <p v-if="!level.records.length && selected + 1 <= 150" class="records-empty muted">
+                        No records yet. <router-link to="/submit">Submit the first one.</router-link>
+                    </p>
                 </div>
-                <div v-else class="level" style="height: 100%; justify-content: center; align-items: center;">
+                <div v-else class="level level--empty panel" key="empty">
                     <p>(ノಠ益ಠ)ノ彡┻━┻</p>
+                    <p class="muted">This level couldn't be loaded.</p>
                 </div>
+                </transition>
             </div>
             <div class="meta-container">
-                <div class="meta">
+                <div class="meta panel">
                     <div class="errors" v-show="errors.length > 0">
                         <p class="error" v-for="error of errors">{{ error }}</p>
                     </div>
@@ -127,19 +133,6 @@ export default {
         video() {
             return embed(this.level.verification);
         },
-        backgroundStyle() {
-            if (!this.level || !this.level.background) {
-                return {};
-            }
-            return {
-                backgroundImage: `url(${this.level.background})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundAttachment: 'fixed',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: 'transparent'
-            };
-        }
     },
     async mounted() {
         this.list = await fetchList();

@@ -1,27 +1,99 @@
+/* =====================================================================
+   NDL design system
+   Light mode: sky blue.  Dark mode: deep navy.
+   Every page uses these variables, so colours only live here.
+   ===================================================================== */
+
 :root {
-    --color-background: white;
-    --color-on-background: black;
-    --color-background-hover: #eee;
-    --color-on-background-hover: black;
-    --color-primary: #000000;
-    --color-on-primary: white;
-    --color-error: #de0000;
-    --color-on-error: white;
+    color-scheme: light;
+
+    --bg: #e8f2ff;
+    --bg-glow-1: #cfe5ff;
+    --bg-glow-2: #e2f0ff;
+    --surface: rgba(255, 255, 255, 0.8);      /* frosted panels */
+    --surface-solid: #ffffff;
+    --surface-2: #eef5ff;                     /* tiles, inputs, table stripes */
+    --line: #cfe0f5;
+    --ink: #0b2545;
+    --muted: #57708f;
+    --accent: #1f7ae0;
+    --accent-strong: #135cba;
+    --accent-soft: #d9e9fd;
+    --accent-fill: #1769d2;        /* filled buttons/highlights (white text on top) */
+    --accent-fill-hover: #1258b4;
+    --on-accent: #ffffff;
+    --accent-glow: rgba(31, 122, 224, 0.32);
+
+    --header-bg: #1769d2;
+    --on-header: #ffffff;
+    --nav-hover: rgba(255, 255, 255, 0.14);
+    --nav-active-bg: #ffffff;
+    --nav-active-ink: #135cba;
+
+
+    --danger: #d23a4a;
+    --success: #14945a;
+    --warning: #b67700;
+
+    --shadow: 0 1px 2px rgba(16, 58, 120, 0.06), 0 10px 30px rgba(16, 58, 120, 0.08);
+    --shadow-strong: 0 2px 6px rgba(16, 58, 120, 0.1), 0 18px 40px rgba(16, 58, 120, 0.16);
+
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --fast: 160ms;
+    --med: 300ms;
+
+    /* Older names some styles still use */
+    --color-background: var(--surface-solid);
+    --color-on-background: var(--ink);
+    --color-background-hover: var(--surface-2);
+    --color-on-background-hover: var(--ink);
+    --color-primary: var(--accent);
+    --color-on-primary: var(--on-accent);
+    --color-error: var(--danger);
+    --color-on-error: #ffffff;
 }
 
-main.dark,
-header.dark {
+:root.dark,
+header.dark,
+main.dark {
     color-scheme: dark;
-    --color-background: #1c1b1f;
-    --color-on-background: white;
-    --color-background-hover: #27262c;
-    --color-on-background-hover: white;
-    --color-primary: #000000;
-    --color-primary-disabled: #1f213c;
-    --color-on-primary: white;
-    --color-error: #de0000;
-    --color-on-error: white;
+
+    --bg: #061127;
+    --bg-glow-1: #0d2550;
+    --bg-glow-2: #0a1a3a;
+    --surface: rgba(11, 28, 60, 0.82);
+    --surface-solid: #0b1c3c;
+    --surface-2: #10264f;
+    --line: #1c3768;
+    --ink: #e4eeff;
+    --muted: #8ea6cc;
+    --accent: #4c9bff;
+    --accent-strong: #7ab5ff;
+    --accent-soft: #13305f;
+    --accent-fill: #2a6fe0;
+    --accent-fill-hover: #3b80f0;
+    --on-accent: #ffffff;
+    --accent-glow: rgba(76, 155, 255, 0.3);
+
+    --header-bg: #07142d;
+    --on-header: #ffffff;
+    --nav-hover: rgba(255, 255, 255, 0.08);
+    --nav-active-bg: #2a6fe0;
+    --nav-active-ink: #ffffff;
+
+
+    --danger: #ff6474;
+    --success: #3ccf8e;
+    --warning: #ffc24d;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+    --shadow-strong: 0 2px 6px rgba(0, 0, 0, 0.35), 0 20px 44px rgba(0, 0, 0, 0.45);
 }
+
+/* ---------- Page frame ---------- */
 
 html,
 body {
@@ -32,26 +104,38 @@ body {
     display: flex;
     flex-direction: column;
     margin: 0;
+    color: var(--ink);
+    background-color: var(--bg);
+    background-image:
+        radial-gradient(60rem 30rem at 15% -10%, var(--bg-glow-1), transparent 70%),
+        radial-gradient(50rem 30rem at 95% 110%, var(--bg-glow-2), transparent 70%);
+    background-attachment: fixed;
+}
+
+::selection {
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--fast) var(--ease);
 }
 
 header,
 main {
-    background-color: var(--color-background);
-    color: var(--color-on-background);
+    color: var(--ink);
     display: grid;
-    grid-template-columns: minmax(16rem, 1fr) minmax(16rem, 2fr) minmax(
-            16em,
-            1fr
-        );
+    grid-template-columns: minmax(16rem, 1fr) minmax(16rem, 2fr) minmax(16em, 1fr);
     column-gap: 2rem;
 }
 
 header {
     display: flex;
     padding-inline: calc(25vw - 10rem);
-    height: 4rem;
-    background-color: var(--color-primary);
-    color: var(--color-on-primary);
+    height: 4.5rem;
+    flex: none;
 }
 @media screen and (min-width: 1366px) {
     header {
@@ -63,8 +147,8 @@ header .logo {
     justify-self: end;
     align-self: center;
     display: flex;
-    align-items: flex-end;
-    gap: 1rem;
+    align-items: center;
+    gap: 0.75rem;
 }
 header .nav {
     flex: 1;
@@ -73,24 +157,185 @@ header .nav {
 main {
     height: 0;
     flex: 1;
-    display: grid;
     grid-template-rows: minmax(0, 1fr);
-    column-gap: 2rem;
+    background: transparent;
 }
 main > div {
     overflow-y: auto;
 }
 
-.spinner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    grid-column: span 3;
+/* ---------- Shared pieces ---------- */
+
+/* Frosted panel used across pages */
+.panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+}
+
+.muted {
+    color: var(--muted);
 }
 
 input[type="checkbox"] {
-    height: 1.25rem;
-    width: 1.25rem;
+    height: 1.15rem;
+    width: 1.15rem;
     cursor: pointer;
     margin: 0;
+    accent-color: var(--accent);
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+/* Thin blue scrollbars */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+}
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted);
+}
+
+/* Flags (List, Leaderboard, Account) */
+.user-with-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.flag {
+    width: 20px;
+    height: 15px;
+    object-fit: cover;
+    border-radius: 3px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(11, 37, 69, 0.15);
+}
+.flag-lg {
+    width: 30px;
+    height: 22px;
+    border-radius: 4px;
+}
+
+/* ---------- Loading: a hopping Geometry Dash cube ---------- */
+
+.spinner {
+    grid-column: 1 / -1;
+    align-self: center;
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 4rem 0;
+    color: var(--muted);
+}
+.spinner__stage {
+    position: relative;
+    width: 2.25rem;
+    height: 3.5rem;
+}
+.spinner__cube {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 6px;
+    background: var(--accent);
+    box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.35);
+    animation: cube-hop 0.9s var(--ease) infinite;
+}
+.spinner__cube::after {
+    content: "";
+    position: absolute;
+    inset: 0.55rem;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.85);
+}
+.spinner__shadow {
+    position: absolute;
+    bottom: 0;
+    left: 0.1rem;
+    width: 2.05rem;
+    height: 0.35rem;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    animation: cube-shadow 0.9s var(--ease) infinite;
+}
+@keyframes cube-hop {
+    0% { transform: translateY(0) rotate(0deg); }
+    45% { transform: translateY(-1.2rem) rotate(45deg); }
+    90%, 100% { transform: translateY(0) rotate(90deg); }
+}
+@keyframes cube-shadow {
+    0%, 90%, 100% { transform: scaleX(1); opacity: 1; }
+    45% { transform: scaleX(0.55); opacity: 0.5; }
+}
+
+/* ---------- Motion ---------- */
+
+/* Moving between pages */
+.page-enter-active {
+    transition: opacity 220ms var(--ease), transform 280ms var(--ease);
+}
+.page-leave-active {
+    transition: opacity 120ms ease;
+}
+.page-enter-from {
+    opacity: 0;
+    transform: translateY(8px);
+}
+.page-leave-to {
+    opacity: 0;
+}
+
+/* Swapping the selected level / player */
+.swap-enter-active {
+    transition: opacity 260ms var(--ease), transform 320ms var(--ease);
+}
+.swap-leave-active {
+    transition: opacity 110ms ease;
+}
+.swap-enter-from {
+    opacity: 0;
+    transform: translateY(12px);
+}
+.swap-leave-to {
+    opacity: 0;
+}
+
+/* Light/dark switch: colours blend for a moment instead of snapping */
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+    transition: background-color 350ms ease, color 350ms ease, border-color 350ms ease,
+        box-shadow 350ms ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

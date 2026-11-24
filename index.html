@@ -2,6 +2,12 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+        <script>
+            // Apply dark mode before the page draws, so it doesn't flash light first.
+            try {
+                if (JSON.parse(localStorage.getItem('dark'))) document.documentElement.classList.add('dark');
+            } catch (e) {}
+        </script>
         <meta name="viewport" content="width=1024" />
         <title>Nerfed Demon List</title>
 
@@ -10,7 +16,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@500;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700;800&display=swap"
             rel="stylesheet"
         />
         <link rel="stylesheet" type="text/css" href="/css/reset.css" />
@@ -53,8 +59,10 @@
                 </router-link>
                 <div class="nav__actions">
                     <button
-                        class="nav__icon"
+                        class="nav__icon nav__icon--theme"
                         @click.prevent="store.toggleDark()"
+                        :aria-label="store.dark ? 'Switch to light mode' : 'Switch to dark mode'"
+                        :title="store.dark ? 'Light mode' : 'Dark mode'"
                     >
                         <img
                             :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'"
@@ -62,7 +70,7 @@
                         />
                     </button>
                     <!-- Replace the '#' with your discord server's invite-->
-                    <a class="nav__icon" href="https://discord.gg/M2KkGySwPG">
+                    <a class="nav__icon" href="https://discord.gg/M2KkGySwPG" target="_blank" rel="noopener" title="Discord server">
                         <img src="/assets/discord.svg" alt="Discord Logo" />
                     </a>
                     <router-link
@@ -100,6 +108,10 @@
                 </div>
             </nav>
         </header>
-        <router-view :class="{ dark: store.dark }"></router-view>
+        <router-view v-slot="{ Component }">
+            <transition name="page" mode="out-in">
+                <component :is="Component" :class="{ dark: store.dark }"></component>
+            </transition>
+        </router-view>
     </body>
 </html>

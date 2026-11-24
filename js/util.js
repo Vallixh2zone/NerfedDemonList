@@ -10,7 +10,8 @@ export function embed(video) {
 }
 
 export function localize(num) {
-    return num.toLocaleString(undefined, { minimumFractionDigits: 3 });
+    // Points are whole numbers, so don't pad them with ".000".
+    return num.toLocaleString(undefined, { maximumFractionDigits: 3 });
 }
 
 export function getThumbnailFromId(id) {

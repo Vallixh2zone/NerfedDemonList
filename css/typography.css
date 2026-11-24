@@ -4,6 +4,7 @@ html,
 body {
     font-family: "Lexend Deca", sans-serif;
     font-weight: 500;
+    font-feature-settings: "tnum" 1;
     -webkit-font-smoothing: subpixel-antialiased;
 }
 button,
@@ -19,8 +20,8 @@ h1,
 .type-headline-lg {
     font-family: "Lexend Deca", sans-serif;
     font-size: 51.4285714286px;
-    line-height: 52px;
-    font-weight: 700;
+    line-height: 54px;
+    font-weight: 800;
     letter-spacing: -2px;
     -webkit-font-smoothing: subpixel-antialiased;
 }
@@ -143,10 +144,10 @@ dt,
 .type-h6,
 .type-title-sm {
     font-family: "Lexend Deca", sans-serif;
-    font-size: 17.1428571429px;
-    line-height: 24px;
-    font-weight: 700;
-    text-transform: uppercase;
+    font-size: 14.2857142857px;
+    line-height: 20px;
+    font-weight: 600;
+    color: var(--muted);
     -webkit-font-smoothing: subpixel-antialiased;
 }
 h6::before,

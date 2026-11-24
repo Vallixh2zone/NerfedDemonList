@@ -2,28 +2,37 @@
     border: none;
     cursor: pointer;
     font: inherit;
-    padding: 1rem;
+    font-weight: 700;
+    padding: 0.8rem 1.25rem;
     margin: 0;
-    background-color: var(--color-primary);
-    color: var(--color-on-primary);
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 0.5rem 0 rgba(0, 0, 102, 0.5);
-    transition: transform 120ms ease, box-shadow 120ms ease;
+    background-color: var(--accent-fill);
+    color: var(--on-accent);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 14px var(--accent-glow);
+    transition: background-color var(--fast) var(--ease), transform var(--fast) var(--ease),
+        box-shadow var(--fast) var(--ease);
 }
 
 .btn:disabled {
-    opacity: 0.5;
+    opacity: 0.45;
     cursor: not-allowed;
+    box-shadow: none;
 }
 
-/* Hover – lift up a bit */
 .btn:not(:disabled):hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 0.75rem 0 rgba(0, 0, 102, 0.4);
+    background-color: var(--accent-fill-hover);
 }
 
-/* Click – press down */
 .btn:not(:disabled):active {
     transform: translateY(1px);
-    box-shadow: 0 1px 0.3rem 0 rgba(0, 0, 102, 0.3);
+    box-shadow: none;
+}
+
+.btn.btn--danger {
+    background-color: var(--danger);
+    box-shadow: 0 4px 14px rgba(210, 58, 74, 0.3);
+}
+.btn.btn--danger:not(:disabled):hover {
+    filter: brightness(0.92);
+    background-color: var(--danger);
 }

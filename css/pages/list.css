@@ -1,121 +1,274 @@
+/* =====================================================================
+   List page: ranked levels on the left, the selected level in the
+   middle, list info on the right.
+   ===================================================================== */
+
+.page-list {
+    background: transparent;
+}
+
 .page-list .list-container,
 .page-list .level-container,
 .page-list .meta-container {
-    padding-block: 2rem;
+    padding-block: 1.75rem;
 }
 .page-list .list-container {
-    padding-inline: 1rem;
+    padding-inline: 1rem 0.5rem;
 }
 .page-list .meta-container {
     padding-right: 2rem;
 }
 
+/* ---------- Ranked list ---------- */
+
 .page-list .list {
+    width: 100%;
     table-layout: auto;
+    border-collapse: separate;
+    border-spacing: 0 0.35rem;
 }
 .page-list .list .rank {
+    width: 1%;
+    white-space: nowrap;
     text-align: end;
-    padding-right: 1rem;
+    padding-right: 0.75rem;
+}
+.page-list .list .rank p {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: color var(--fast) var(--ease);
+}
+.page-list .list tr:has(.level.active) .rank p {
+    color: var(--accent);
+    font-weight: 800;
 }
 .page-list .list .level {
     width: 100%;
 }
 .page-list .list .level button {
-    background-color: var(--color-background);
-    color: var(--color-on-background);
-    border: none;
-    border-radius: 0.5rem;
-    padding: 1rem;
+    width: 100%;
+    display: block;
+    background-color: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
     text-align: start;
     word-break: normal;
     overflow-wrap: anywhere;
     cursor: pointer;
-    transition: transform 120ms ease, background-color 120ms ease, box-shadow 120ms ease;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    transition: background-color var(--fast) var(--ease), color var(--fast) var(--ease),
+        border-color var(--fast) var(--ease), box-shadow var(--med) var(--ease),
+        transform var(--med) var(--ease);
+}
+.page-list .list .level button:hover {
+    border-color: var(--accent);
+    background-color: var(--surface-solid);
+}
+.page-list .list .level.active button {
+    background-color: var(--accent-fill);
+    border-color: var(--accent-fill);
+    color: var(--on-accent);
+    box-shadow: 0 8px 22px var(--accent-glow);
+    transform: translateX(4px);
 }
 .page-list .list .level.error button {
-    color: var(--color-error);
+    color: var(--danger);
     cursor: not-allowed;
     text-decoration: line-through;
 }
-.page-list .list .level button:hover {
-    background-color: var(--color-background-hover);
-    color: var(--color-on-background-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-}
-.page-list .list .level button:active {
-    transform: translateY(1px);
-    box-shadow: none;
-}
-.page-list .list .level.active button {
-    background-color: var(--color-primary);
-    color: var(--color-on-primary);
-}
+
+/* ---------- Selected level ---------- */
+
 .page-list .level-container .level {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    padding-right: 2rem;
-    max-width: 48rem;
+    gap: 1.5rem;
+    max-width: 50rem;
+    padding: 2rem;
+    margin-right: 0.5rem;
 }
+.page-list .level-container .level--empty {
+    align-items: center;
+    justify-content: center;
+    min-height: 20rem;
+    text-align: center;
+}
+
+.page-list .level-container .level h1 {
+    overflow-wrap: anywhere;
+}
+
 .page-list .level-container .level .level-authors {
     display: grid;
     grid-template-columns: max-content 1fr;
     grid-auto-rows: max-content;
-    gap: 1rem;
+    gap: 0.75rem 1.5rem;
+    align-items: baseline;
 }
+
 .page-list .level-container .level .video {
-    aspect-ratio: 16/9;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: none;
+    border-radius: var(--radius-md);
+    background: #000;
+    box-shadow: var(--shadow-strong);
 }
+
 .page-list .level-container .level .stats {
-    display: flex;
-    justify-content: space-evenly;
-    text-align: center;
-    gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
 }
 .page-list .level-container .level .stats li {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+    gap: 0.7rem;
+    padding: 0.9rem 1rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-md);
 }
+.page-list .level-container .level .stats li p {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 26px;
+    overflow-wrap: anywhere;
+}
+.page-list .level-container .level .stats li:first-child p {
+    color: var(--accent);
+}
+
+.page-list .level-container .level h2 {
+    font-size: 26px;
+    line-height: 32px;
+    letter-spacing: -0.5px;
+    margin-top: 0.5rem;
+}
+.page-list .level-container .level h2 + p {
+    color: var(--muted);
+    margin-top: -0.75rem;
+}
+.page-list .level-container .level h2 + p strong {
+    color: var(--ink);
+    font-weight: 700;
+}
+
+/* Records */
 .page-list .level-container .level .records {
-    table-layout: fixed;
+    width: 100%;
+    table-layout: auto;
+    border-collapse: separate;
+    border-spacing: 0;
 }
-.page-list .level-container .level .records tr td:not(:last-child) {
-    padding-right: 1rem;
+.page-list .level-container .level .records .record td {
+    padding: 0.7rem 0.6rem;
+    border-top: 1px solid var(--line);
+    vertical-align: middle;
 }
-.page-list .level-container .level .records .percent,
-.page-list .level-container .level .records .user,
-.page-list .level-container .level .records .hz {
-    padding-block: 1rem;
+.page-list .level-container .level .records .record:first-child td {
+    border-top: none;
+}
+.page-list .level-container .level .records .record:hover td {
+    background: var(--surface-2);
+}
+.page-list .level-container .level .records .record td:first-child {
+    border-top-left-radius: var(--radius-sm);
+    border-bottom-left-radius: var(--radius-sm);
+}
+.page-list .level-container .level .records .record td:last-child {
+    border-top-right-radius: var(--radius-sm);
+    border-bottom-right-radius: var(--radius-sm);
+}
+.page-list .level-container .level .records .percent {
+    width: 4.5rem;
+    text-align: start;
+}
+.page-list .level-container .level .records .percent p {
+    display: inline-block;
+    min-width: 3.4rem;
+    text-align: center;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 700;
+    background: var(--surface-2);
+    color: var(--muted);
+}
+.page-list .level-container .level .records .percent p::before,
+.page-list .level-container .level .records .percent p::after {
+    display: none;
+}
+.page-list .level-container .level .records .record--complete .percent p {
+    background: var(--accent-soft);
+    color: var(--accent);
 }
 .page-list .level-container .level .records .user {
     width: 100%;
 }
-.page-list .level-container .level .records .percent,
-.page-list .level-container .level .records .hz {
-    text-align: end;
+.page-list .level-container .level .records .user a:hover {
+    color: var(--accent);
 }
-.page-list .meta-container .og a:hover,
-.page-list .level-container .level .records a:hover {
+.page-list .level-container .level .records .mobile img {
+    height: 1.1rem;
+    opacity: 0.6;
+    display: block;
+}
+.page-list .level-container .level .records .hz {
+    width: 5rem;
+    text-align: end;
+    white-space: nowrap;
+}
+.page-list .level-container .level .records .hz p {
+    color: var(--muted);
+    font-size: 15px;
+}
+.page-list .level-container .level .records-empty {
+    margin-top: -0.5rem;
+}
+.page-list .level-container .level .records-empty a {
+    color: var(--accent);
+    font-weight: 600;
+}
+.page-list .level-container .level .records-empty a:hover {
     text-decoration: underline;
 }
+
+/* ---------- Right column ---------- */
+
 .page-list .meta {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+.page-list .meta h3 {
+    font-size: 18px;
+    line-height: 24px;
+}
+.page-list .meta .og p {
+    color: var(--muted);
+}
+.page-list .meta .og a {
+    color: var(--accent);
+}
+.page-list .meta-container .og a:hover {
+    text-decoration: underline;
 }
 .page-list .meta .errors {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 .page-list .meta .errors .error {
-    padding: 1rem;
-    background-color: var(--color-error);
-    color: var(--color-on-error);
-    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--danger);
+    color: #ffffff;
+    border-radius: var(--radius-md);
 }
 .page-list .meta .editors {
     display: flex;
@@ -125,174 +278,12 @@
 .page-list .meta .editors li {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
 }
 .page-list .meta .editors li img {
-    height: 1.25rem;
+    height: 1.1rem;
+    opacity: 0.85;
 }
 .page-list .meta .editors li a:hover {
-    text-decoration: underline;
-}
-
-/* ===== Per-level background ===== */
-.page-list {
-    position: relative;
-    transition: background-image 0.4s ease;
-    background-color: transparent !important;
-}
-
-/* Blurred + darkened background layer */
-.page-list::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: inherit;                    /* takes the same background image */
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    filter: blur(8px);                      /* blur amount – raise for more blur */
-    transform: scale(1.05);                 /* prevents blur edges from showing */
-    z-index: 0;
-    pointer-events: none;
-}
-
-/* Dark overlay on top of the blurred image so text stays readable */
-.page-list::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);        /* darkness – raise for more contrast */
-    z-index: 0;
-    pointer-events: none;
-}
-
-/* Keep all content above the background layers */
-.page-list > * {
-    position: relative;
-    z-index: 1;
-}
-/* ===== Readable boxes behind text ===== */
-
-/* Left side rank numbers */
-.page-list .list .rank p {
-    background: rgba(255, 255, 255, 0.9);
-    color: #000;
-    padding: 0.35rem 0.6rem;
-    border-radius: 6px;
-    display: inline-block;
-}
-
-/* Center level info (title, authors, stats, records header) */
-.page-list .level-container .level h1,
-.page-list .level-container .level h2,
-.page-list .level-container .level .level-authors,
-.page-list .level-container .level .stats,
-.page-list .level-container .level > p {
-    background: rgba(255, 255, 255, 0.92);
-    color: #000;
-    padding: 0.6rem 1rem;
-    border-radius: 8px;
-    display: inline-block;
-}
-
-/* Make the authors block and stats span nicely */
-.page-list .level-container .level .level-authors,
-.page-list .level-container .level .stats {
-    display: grid;          /* keep original layout */
-    width: fit-content;
-    max-width: 100%;
-}
-
-/* Right side meta (editors, requirements, etc.) */
-.page-list .meta-container .meta {
-    background: rgba(255, 255, 255, 0.92);
-    color: #000;
-    padding: 1.25rem;
-    border-radius: 12px;
-}
-
-/* Dark mode versions */
-main.dark.page-list .list .rank p,
-main.dark.page-list .level-container .level h1,
-main.dark.page-list .level-container .level h2,
-main.dark.page-list .level-container .level .level-authors,
-main.dark.page-list .level-container .level .stats,
-main.dark.page-list .level-container .level > p,
-main.dark.page-list .meta-container .meta {
-    background: rgba(30, 30, 35, 0.92);
-    color: #fff;
-}
-/* Border around the embedded video */
-.page-list .level-container .level .video {
-    border: 3px solid rgba(255, 255, 255, 0.85);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-}
-
-/* Dark mode versions */
-main.dark.page-list .level-container .level .video {
-    border-color: rgba(255, 255, 255, 0.25);
-}
-
-/* Make individual records readable – fixed version */
-.page-list .level-container .level .records {
-    background: rgba(255, 255, 255, 0.92);
-    border-radius: 10px;
-    padding: 0.75rem 1rem;
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-.page-list .level-container .level .records .record td {
-    color: #000;
-    padding-block: 0.6rem;
-    vertical-align: middle;
-}
-
-.page-list .level-container .level .records .record a {
-    color: #000;
-}
-
-.page-list .level-container .level .records .percent {
-    width: 4rem;
-    text-align: end;
-    padding-right: 1rem;
-}
-
-.page-list .level-container .level .records .user {
-    width: 100%;
-}
-
-.page-list .level-container .level .records .hz {
-    width: 5rem;
-    text-align: end;
-    white-space: nowrap;
-}
-
-/* Dark mode */
-main.dark.page-list .level-container .level .records {
-    background: rgba(30, 30, 35, 0.92);
-}
-
-main.dark.page-list .level-container .level .records .record td,
-main.dark.page-list .level-container .level .records .record a {
-    color: #fff;
-}
-/* Flags next to record names */
-.user-with-flag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-}
-
-.flag {
-    width: 20px;
-    height: 15px;
-    object-fit: cover;
-    border-radius: 2px;
-    flex-shrink: 0;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+    color: var(--accent);
 }

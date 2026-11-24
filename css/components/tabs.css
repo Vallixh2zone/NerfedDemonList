@@ -1,46 +1,42 @@
+/* Segmented switch (e.g. Players / Countries, Review tabs) */
 .tabs {
-    display: flex;
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.3rem;
+    width: fit-content;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 .tabs .tab {
     border: none;
     cursor: pointer;
     font-family: "Lexend Deca", sans-serif;
-    font-size: 17.1428571429px;
+    font-size: 15px;
     line-height: 20px;
-    font-weight: 500;
-    padding: 1rem;
+    font-weight: 600;
+    padding: 0.6rem 1.15rem;
     margin: 0;
+    border-radius: 999px;
     background-color: transparent;
-    color: var(--color-on-background);
-    border-bottom: 3px solid transparent;
-    -webkit-font-smoothing: subpixel-antialiased;
+    color: var(--muted);
+    transition: background-color var(--fast) var(--ease), color var(--fast) var(--ease),
+        box-shadow var(--fast) var(--ease);
 }
-
-.tabs .tab:first-child {
-    border-top-left-radius: 0.5rem;
-}
-
-.tabs .tab:last-child {
-    border-top-right-radius: 0.5rem;
-}
-
-.tabs .tab.selected {
-    border-bottom: 3px solid var(--color-on-background);
+.tabs .tab::before,
+.tabs .tab::after {
+    display: none;
 }
 
 .tabs .tab:hover {
-    background-color: var(--color-background-hover);
+    color: var(--ink);
 }
 
-.tab {
-    transition: transform 120ms ease;
-}
-
-.tab:hover {
-    transform: translateY(-2px);
-}
-
-.tab:active {
-    transform: translateY(1px);
+.tabs .tab.selected {
+    background-color: var(--accent-fill);
+    color: var(--on-accent);
+    box-shadow: 0 4px 12px var(--accent-glow);
 }

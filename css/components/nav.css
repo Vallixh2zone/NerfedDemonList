@@ -1,30 +1,85 @@
+/* ---------- Top bar ---------- */
+
+header {
+    position: relative;
+    z-index: 10;
+    background: var(--header-bg);
+    color: var(--on-header);
+    box-shadow: 0 8px 24px rgba(8, 40, 90, 0.18);
+}
+header.dark {
+    box-shadow: 0 1px 0 var(--line), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+header .logo h2 {
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+}
+header .logo h2::before,
+header .logo h2::after {
+    display: none;
+}
+header .logo p {
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 600;
+    padding: 0.35rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    color: rgba(255, 255, 255, 0.9);
+}
+header .logo p::before,
+header .logo p::after {
+    display: none;
+}
+
 .nav {
     display: flex;
-    column-gap: 2rem;
+    align-items: center;
+    column-gap: 0.25rem;
+    min-width: 0;
 }
+/* The bar uses the full width to the right of the logo */
+@media screen and (min-width: 1366px) {
+    header .nav {
+        grid-column: 2 / -1;
+        padding-right: 2rem;
+    }
+}
+
+/* Page links: pills, the current page is filled */
 .nav .nav__tab {
-    padding-top: 4px;
-    border-bottom: 4px solid transparent;
+    height: 2.5rem;
     display: flex;
     align-items: center;
-    padding-inline: 0.5rem;
-    transition: border-color 100ms ease;
-}
-.nav .nav__tab.router-link-active {
-    border-color: var(--color-on-primary);
+    padding-inline: 1rem;
+    white-space: nowrap;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.82);
+    transition: background-color var(--fast) var(--ease), color var(--fast) var(--ease);
 }
 .nav .nav__tab:hover {
-    border-color: var(--color-on-primary);
+    color: var(--on-header);
+    background-color: var(--nav-hover);
 }
+.nav .nav__tab.router-link-active {
+    background-color: var(--nav-active-bg);
+    color: var(--nav-active-ink);
+}
+
 .nav .nav__actions {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    gap: 0.4rem;
 }
+
 .nav .nav__actions .nav__icon {
-    height: 3rem;
-    width: 3rem;
+    height: 2.5rem;
+    width: 2.5rem;
     border: none;
     background-color: transparent;
     border-radius: 50%;
@@ -32,56 +87,87 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 100ms ease;
+    transition: background-color var(--fast) var(--ease), transform var(--med) var(--ease);
 }
 .nav .nav__actions .nav__icon:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: var(--nav-hover);
 }
 .nav .nav__actions .nav__icon img {
-    height: 1.5rem;
+    height: 1.3rem;
 }
-.nav .nav__actions .nav__cta {
-    margin-left: 1rem;
-    padding: 1rem;
-    background-color: var(--color-on-primary);
-    color: var(--color-primary);
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 0.5rem 0 rgba(0, 0, 102, 0.5);
-    transition: transform 100ms ease;
+/* The sun/moon turns when you switch themes */
+.nav .nav__actions .nav__icon--theme img {
+    transition: transform 450ms var(--ease);
 }
-.nav .nav__actions .nav__cta:hover:not(:active) {
-    transform: translateY(-2px);
+.nav .nav__actions .nav__icon--theme:active img {
+    transform: rotate(-30deg) scale(0.9);
 }
 
 .nav .nav__actions .nav__tab--small {
-    height: 100%;
-    margin-left: 1rem;
+    margin-left: 0.25rem;
 }
+
+/* Account button (name + Discord picture) */
 .nav .nav__actions .nav__account {
-    margin-left: 1rem;
-    padding: 0.5rem 0.75rem;
-    background: transparent;
-    color: var(--color-on-primary);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    margin-left: 0.25rem;
+    padding: 0 0.9rem 0 0.4rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--on-header);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
     cursor: pointer;
     max-width: 14rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: background-color var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+.nav .nav__actions button.nav__account {
+    padding: 0 1rem;
 }
 .nav .nav__actions .nav__account:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.18);
 }
-
-.nav .nav__actions .nav__account {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.nav .nav__actions .nav__account.router-link-active {
+    border-color: var(--on-header);
 }
 .nav .nav__actions .nav__avatar {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.8rem;
+    height: 1.8rem;
     border-radius: 50%;
     object-fit: cover;
+    flex: none;
+}
+
+/* Submit Record: the one bright button in the bar */
+.nav .nav__actions .nav__cta {
+    margin-left: 0.5rem;
+    height: 2.75rem;
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    background-color: #ffffff;
+    color: #135cba;
+    font-weight: 700;
+    white-space: nowrap;
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgba(4, 30, 70, 0.25);
+    transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease),
+        background-color var(--fast) var(--ease);
+}
+header.dark .nav .nav__actions .nav__cta {
+    background-color: var(--accent-fill);
+    color: #ffffff;
+    box-shadow: 0 4px 18px var(--accent-glow);
+}
+.nav .nav__actions .nav__cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(4, 30, 70, 0.3);
+}
+.nav .nav__actions .nav__cta:active {
+    transform: translateY(1px);
 }

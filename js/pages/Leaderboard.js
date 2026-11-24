@@ -26,7 +26,7 @@ export default {
                     </p>
                 </div>
 
-                <div class="lb-tabs">
+                <div class="lb-tabs tabs">
     <button
         class="tab type-label-lg"
         :class="{ selected: mode === 'players' }"
@@ -88,8 +88,9 @@ export default {
                     </table>
                 </div>
 
-                <div class="player-container" v-if="mode === 'players' && entry">
-                    <div class="player">
+                <transition name="swap" mode="out-in">
+                <div class="player-container" v-if="mode === 'players' && entry" :key="'p' + selected">
+                    <div class="player panel">
                         <h1 class="user-with-flag">
                             <img
                                 v-if="entry.avatar"
@@ -106,7 +107,7 @@ export default {
                             />
                             #{{ selected + 1 }} {{ entry.user }}
                         </h1>
-                        <h3>{{ entry.total }}</h3>
+                        <p class="player-total">{{ localize(entry.total) }} <span>points</span></p>
                         <h2 v-if="entry.verified.length > 0">Verified ({{ entry.verified.length}})</h2>
                         <table class="table">
                             <tr v-for="score in entry.verified">
@@ -152,8 +153,8 @@ export default {
                     </div>
                 </div>
 
-              <div class="player-container" v-else-if="mode === 'countries' && countryEntry">
-    <div class="player">
+              <div class="player-container" v-else-if="mode === 'countries' && countryEntry" :key="'c' + selected">
+    <div class="player panel">
         <h1 class="user-with-flag">
             <img
                 class="flag flag-lg"
@@ -162,8 +163,8 @@ export default {
             />
             #{{ selected + 1 }} {{ countryName(countryEntry.country) }}
         </h1>
-        <h3>{{ countryEntry.total }} points</h3>
-        <p>{{ countryEntry.playerCount }} player(s) from this country</p>
+        <p class="player-total">{{ localize(countryEntry.total) }} <span>points</span></p>
+        <p class="muted">{{ countryEntry.playerCount }} {{ countryEntry.playerCount === 1 ? 'player' : 'players' }} from this country</p>
 
         <h2>Top players</h2>
         <table class="table">
@@ -181,6 +182,7 @@ export default {
         </table>
     </div>
 </div>
+                </transition>
             </div>
         </main>
     `,
