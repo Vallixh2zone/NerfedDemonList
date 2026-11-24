@@ -36,7 +36,8 @@ export function shuffle(array) {
 
 export function flagUrl(code) {
     if (!code) return null;
-    return `https://flagcdn.com/20x15/${code.toLowerCase()}.png`;
+    // Vector flags stay sharp at any size (the old 20x15 pictures looked blurry).
+    return `https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.3.2/flags/4x3/${code.toLowerCase()}.svg`;
 }
 
 export function countryName(code) {
