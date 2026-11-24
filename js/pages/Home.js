@@ -65,7 +65,6 @@ export default {
                     </a>
                 </nav>
 
-                <p class="home-credit">Website layout made by <a href="https://tsl.pages.dev/" target="_blank" rel="noopener">TheShittyList</a></p>
             </div>
         </main>
     `,
