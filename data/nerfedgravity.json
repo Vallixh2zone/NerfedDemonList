@@ -1,14 +1,12 @@
 {
-    "id": 144551122,
-    "name": "Nerfed Defeated Circles",
-    "author": "ItzNaffy",
-    "creators": ["ItzNaffy", "GXQ"],
-    "verifier": "Jamichi",
-    "verification": "https://www.youtube.com/watch?v=pHjAZr9LW0Y",
-    "showcase": "https://youtu.be/oZm1GhvjlN4",
+    "id": 152953135,
+    "name": "Nerfed gravity",
+    "author": "cesiumvx",
+    "creators": ["Cesium", "KazaGD"],
+    "verifier": "Cesium",
+    "verification": "https://www.youtube.com/watch?v=aT8hQbpHQX0",
     "percentToQualify": 100,
     "password": "Free to Copy",
-    "background": "/assets/backgrounds/ndefcircbg.png",
     "records": [
     ]
 }
