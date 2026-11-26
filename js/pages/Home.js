@@ -55,6 +55,10 @@ export default {
                         <h3>Roulette</h3>
                         <p>Get random levels one after another, needing 1% more each time. See how far you get.</p>
                     </router-link>
+                    <router-link to="/wheel" class="home-feature">
+                        <h3>Wheel</h3>
+                        <p>Put any levels on a wheel and spin it to pick what to play next.</p>
+                    </router-link>
                     <router-link to="/submit" class="home-feature">
                         <h3>Submit a record</h3>
                         <p>Log in with Discord and send your run for a list mod to check.</p>

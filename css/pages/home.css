@@ -194,7 +194,7 @@
 
 .home-features {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     overflow: hidden;
 }
 .home-feature {
@@ -245,7 +245,7 @@
     .home-features {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    .home-feature:nth-child(3) {
+    .home-feature:nth-child(odd) {
         border-left: none;
     }
     .home-feature:nth-child(n + 3) {
