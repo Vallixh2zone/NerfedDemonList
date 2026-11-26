@@ -39,7 +39,7 @@ export async function onRequestPost({ request, env }) {
     const name = cleanName(body.name);
     if (name === user.name) return error("That's already your name.");
 
-    const nextChange = (user.name_changed_at || 0) + 30 * 86400;
+    const nextChange = (user.name_changed_at || 0) + 7 * 86400;
     if (user.name_changed_at && now() < nextChange) {
         const days = Math.ceil((nextChange - now()) / 86400);
         return error(`You can change your name again in ${days} day(s).`);

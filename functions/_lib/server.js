@@ -189,7 +189,7 @@ export async function getExistingNames(env, request) {
 
 export const NAME_RE = /^[A-Za-z0-9_.\- ]{2,24}$/;
 
-export const NAME_COOLDOWN_DAYS = 30;
+export const NAME_COOLDOWN_DAYS = 7;
 
 export function cleanName(value) {
     return String(value || '').trim().replace(/\s+/g, ' ');

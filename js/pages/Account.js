@@ -51,7 +51,7 @@ export default {
                             <button class="account-btn account-btn--ghost" :disabled="busy" @click="cancelRename">Cancel request</button>
                         </template>
                         <template v-else>
-                            <p>All your records are listed under this name. To keep the list fair, name changes are checked by a mod (changing only capital letters is instant). You can change it once every 30 days.</p>
+                            <p>All your records are listed under this name. To keep the list fair, name changes are checked by a mod (changing only capital letters is instant). You can change it once every 7 days.</p>
                             <p v-if="cooldownText" class="type-label-md">{{ cooldownText }}</p>
                             <form v-else class="account-form" @submit.prevent="requestRename">
                                 <label>
