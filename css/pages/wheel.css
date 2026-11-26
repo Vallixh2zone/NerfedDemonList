@@ -22,8 +22,12 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    position: sticky;
-    top: 0;
+}
+/* Solid panels here: blurred see-through panels would re-blur on every frame of a spin */
+.page-wheel .panel {
+    background: var(--surface-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
 }
 .wheel-side h2 {
     font-size: 20px;
@@ -224,18 +228,36 @@
     aspect-ratio: 1;
 }
 
-.wheel__disc {
+/* Round window the wheel turns inside. It never changes size or shape. */
+.wheel__clip {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    contain: paint;
+    isolation: isolate;
+    box-shadow: 0 16px 36px rgba(16, 58, 120, 0.2);
+}
+.dark .wheel__clip {
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+}
+
+/* The turning part: drawn once, then just rotated by the graphics card */
+.wheel__rotor {
     width: 100%;
     height: 100%;
-    display: block;
     transform-origin: 50% 50%;
     transition-property: transform;
     /* Fast start, long slow finish, like a real wheel */
     transition-timing-function: cubic-bezier(0.12, 0.65, 0.08, 1);
-    filter: drop-shadow(0 16px 30px rgba(16, 58, 120, 0.18));
+    will-change: transform;
+    backface-visibility: hidden;
 }
-.dark .wheel__disc {
-    filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.45));
+
+.wheel__disc {
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 .wheel__rim {
@@ -292,9 +314,10 @@
     aspect-ratio: 1;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    border: 5px solid var(--surface-solid);
+    border: 5px solid #ffffff;
     background: var(--ink);
     color: var(--surface-solid);
+    opacity: 1;
     font: inherit;
     font-size: clamp(16px, 2.4vw, 22px);
     font-weight: 800;
@@ -312,7 +335,7 @@
 }
 .wheel__spin:disabled {
     cursor: default;
-    opacity: 0.9;
+    opacity: 1; /* stays solid while the wheel spins */
 }
 
 .wheel-empty {
@@ -326,9 +349,48 @@
     padding: 1.5rem 1.75rem;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
     border-color: var(--accent);
     box-shadow: 0 0 0 1px var(--accent), var(--shadow-strong);
+}
+/* While spinning: same card, dimmed, so the page doesn't move */
+.wheel-result {
+    transition: border-color var(--med) var(--ease), box-shadow var(--med) var(--ease);
+}
+.wheel-result.is-waiting {
+    border-color: var(--line);
+    box-shadow: var(--shadow);
+}
+.wheel-result.is-waiting .wheel-result__body > *:not(.wheel-result__rank) {
+    opacity: 0.35;
+}
+.wheel-result__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    animation: result-in 380ms var(--ease);
+}
+@keyframes result-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+}
+.wheel-result__decision {
+    display: inline-flex;
+    align-items: center;
+    height: 2.9rem;
+    padding: 0 1rem;
+    border-radius: var(--radius-md);
+    background: var(--surface-2);
+    color: var(--muted);
+    font-weight: 700;
+}
+.wheel-result .btn:disabled {
+    opacity: 1;
+}
+.wheel-link:disabled {
+    cursor: default;
+    text-decoration: none;
 }
 .wheel-result__rank {
     font-size: 15px;
@@ -425,8 +487,5 @@
 @media screen and (max-width: 1150px) {
     .wheel-layout {
         grid-template-columns: 1fr;
-    }
-    .wheel-side {
-        position: static;
     }
 }

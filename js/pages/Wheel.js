@@ -89,30 +89,38 @@ export default {
                 <section class="wheel-stage">
                     <div class="wheel">
                         <div class="wheel__pointer" aria-hidden="true"></div>
-                        <svg
-                            class="wheel__disc"
-                            :viewBox="'0 0 ' + SIZE + ' ' + SIZE"
-                            :style="{ transform: 'rotate(' + rotation + 'deg)', transitionDuration: spinning ? SPIN_MS + 'ms' : '0ms' }"
-                            @transitionend="onSpinEnd"
-                            role="img"
-                            :aria-label="'Wheel with ' + onWheel.length + ' levels'"
-                        >
-                            <circle :cx="SIZE / 2" :cy="SIZE / 2" :r="R + 6" class="wheel__rim" />
-                            <template v-if="onWheel.length === 1">
-                                <circle :cx="SIZE / 2" :cy="SIZE / 2" :r="R" class="wheel__slice wheel__slice--0" />
-                            </template>
-                            <g v-for="(slice, i) in slices" :key="slice.path">
-                                <path v-if="onWheel.length > 1" :d="slice.d" :class="['wheel__slice', 'wheel__slice--' + (i % 3), { 'is-winner': winner && winner.path === slice.path && !spinning }]" />
-                                <text
-                                    :x="SIZE / 2 + 68"
-                                    :y="SIZE / 2"
-                                    :transform="slice.labelTransform"
-                                    dominant-baseline="middle"
-                                    class="wheel__label"
-                                    :style="{ fontSize: labelSize + 'px' }"
-                                >{{ slice.label }}</text>
-                            </g>
-                        </svg>
+                        <!-- The clip keeps the turning wheel inside its circle; the rotor is
+                             turned as one ready-made layer, so nothing else on the page redraws. -->
+                        <div class="wheel__clip">
+                            <div
+                                class="wheel__rotor"
+                                :style="{ transform: 'rotate(' + rotation + 'deg)', transitionDuration: spinning ? SPIN_MS + 'ms' : '0ms' }"
+                                @transitionend="onSpinEnd"
+                            >
+                                <svg
+                                    class="wheel__disc"
+                                    :viewBox="'0 0 ' + SIZE + ' ' + SIZE"
+                                    role="img"
+                                    :aria-label="'Wheel with ' + onWheel.length + ' levels'"
+                                >
+                                    <circle :cx="SIZE / 2" :cy="SIZE / 2" :r="R + 6" class="wheel__rim" />
+                                    <template v-if="onWheel.length === 1">
+                                        <circle :cx="SIZE / 2" :cy="SIZE / 2" :r="R" class="wheel__slice wheel__slice--0" />
+                                    </template>
+                                    <g v-for="(slice, i) in slices" :key="slice.path">
+                                        <path v-if="onWheel.length > 1" :d="slice.d" :class="['wheel__slice', 'wheel__slice--' + (i % 3), { 'is-winner': shown && shown.path === slice.path && !spinning }]" />
+                                        <text
+                                            :x="SIZE / 2 + 68"
+                                            :y="SIZE / 2"
+                                            :transform="slice.labelTransform"
+                                            dominant-baseline="middle"
+                                            class="wheel__label"
+                                            :style="{ fontSize: labelSize + 'px' }"
+                                        >{{ slice.label }}</text>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
                         <button
                             class="wheel__spin"
                             @click="spin"
@@ -125,24 +133,35 @@ export default {
                         The wheel is empty. Pick some levels on the left.
                     </p>
 
-                    <!-- Result -->
-                    <transition name="swap">
-                        <div v-if="winner && !spinning" class="wheel-result panel" :key="spinCount">
-                            <p class="wheel-result__rank">#{{ winner.rank }}</p>
-                            <h2>{{ winner.name }}</h2>
-                            <p class="muted">Verified by {{ winner.verifier }} · {{ points(winner) }} points</p>
+                    <!-- Result. The card stays put while the wheel spins (it dims and waits),
+                         so the page never changes height mid-spin. -->
+                    <div
+                        v-if="card"
+                        class="wheel-result panel"
+                        :class="{ 'is-waiting': spinning }"
+                        :aria-busy="spinning"
+                    >
+                        <div class="wheel-result__body" :key="spinning ? 'waiting' : spinCount">
+                            <p class="wheel-result__rank">{{ spinning ? 'Spinning…' : '#' + card.rank }}</p>
+                            <h2>{{ card.name }}</h2>
+                            <p class="muted">Verified by {{ card.verifier }} · {{ card.points }} points</p>
                             <div class="wheel-result__id">
                                 <span class="muted">ID</span>
-                                <strong>{{ winner.id }}</strong>
-                                <button class="wheel-link" @click="copyId(winner.id)">{{ copied ? 'Copied' : 'Copy ID' }}</button>
+                                <strong>{{ card.id }}</strong>
+                                <button class="wheel-link" @click="copyId(card.id)" :disabled="spinning">{{ copied ? 'Copied' : 'Copy ID' }}</button>
                             </div>
                             <div class="wheel-result__actions">
-                                <button class="btn" @click="keep">Keep on wheel</button>
-                                <button class="btn btn--ghost" @click="removeWinner">Remove from wheel</button>
-                                <router-link :to="{ path: '/list', query: { level: winner.rank } }" class="wheel-link">Open on the list</router-link>
+                                <template v-if="!decision || spinning">
+                                    <button class="btn" @click="keep" :disabled="spinning">Keep on wheel</button>
+                                    <button class="btn btn--ghost" @click="removeWinner" :disabled="spinning">Remove from wheel</button>
+                                </template>
+                                <p v-else class="wheel-result__decision">
+                                    {{ decision === 'kept' ? 'Kept on the wheel' : 'Removed from the wheel' }}
+                                </p>
+                                <router-link :to="{ path: '/list', query: { level: card.rank } }" class="wheel-link">Open on the list</router-link>
                             </div>
                         </div>
-                    </transition>
+                    </div>
                 </section>
 
                 <!-- History -->
@@ -180,12 +199,24 @@ export default {
         search: '',
         rotation: 0,
         spinning: false,
-        winner: null,
+        winner: null, // level the current spin will land on
+        shown: null, // level shown on the result card (the last one landed on)
+        decision: null, // 'kept' or 'removed' for the shown level
         spinCount: 0,
         copied: false,
         now: Date.now(),
     }),
     computed: {
+        // What the result card shows: the last result (dimmed while spinning).
+        card() {
+            const level = this.shown;
+            if (!level && !this.spinning) return null;
+            if (!level) {
+                // First spin: a same-sized placeholder, so nothing jumps when the result arrives.
+                return { rank: '?', name: 'Spinning…', verifier: '…', points: '…', id: '…', path: null };
+            }
+            return { ...level, points: this.points(level) };
+        },
         byPath() {
             const map = {};
             for (const l of this.levels) map[l.path] = l;
@@ -291,7 +322,7 @@ export default {
         },
         remove(path) {
             this.selected = this.selected.filter((p) => p !== path);
-            if (this.winner && this.winner.path === path) this.winner = null;
+            if (this.shown && this.shown.path === path && !this.spinning) this.decision = 'removed';
         },
         spin() {
             const n = this.onWheel.length;
@@ -323,18 +354,21 @@ export default {
             if (!this.spinning) return;
             clearTimeout(this.spinTimer);
             this.spinning = false;
+            this.shown = this.winner;
+            this.decision = null;
             this.spinCount++;
             this.history.unshift({ path: this.winner.path, name: this.winner.name, at: Date.now() });
             this.history = this.history.slice(0, HISTORY_LIMIT);
             this.save();
         },
         keep() {
-            this.winner = null;
+            this.decision = 'kept';
         },
         removeWinner() {
-            const path = this.winner.path;
+            const path = this.shown.path;
             if (this.history[0] && this.history[0].path === path) this.history[0].removed = true;
-            this.remove(path);
+            this.selected = this.selected.filter((p) => p !== path);
+            this.decision = 'removed';
             this.save();
         },
         clearHistory() {
