@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN username TEXT; ALTER TABLE users ADD COLUMN username_lower TEXT; ALTER TABLE users ADD COLUMN password_hash TEXT; CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username ON users(username_lower); CREATE TABLE IF NOT EXISTS login_attempts (key TEXT NOT NULL, at INTEGER NOT NULL); CREATE INDEX IF NOT EXISTS idx_login_attempts ON login_attempts(key, at);

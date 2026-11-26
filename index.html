@@ -92,7 +92,7 @@
                         v-if="session.user"
                         class="nav__account type-label-md"
                         to="/account"
-                        :title="'Logged in with Discord as ' + session.user.discordUsername"
+                        title="Your account"
                     >
                         <img
                             v-if="session.user.avatar"
@@ -101,15 +101,15 @@
                             alt=""
                             referrerpolicy="no-referrer"
                         />
-                        {{ session.user.name || session.user.discordUsername }}
+                        {{ session.user.name || session.user.username || session.user.discordUsername }}
                     </router-link>
-                    <button
+                    <router-link
                         v-else-if="session.loaded"
                         class="nav__account type-label-md"
-                        @click.prevent="login()"
+                        to="/login"
                     >
                         Log in
-                    </button>
+                    </router-link>
                     <router-link class="nav__cta type-label-lg" to="/submit"
                         >Submit Record</router-link
                     >

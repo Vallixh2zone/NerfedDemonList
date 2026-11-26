@@ -5,6 +5,7 @@ import { COUNTRY_CODES } from '../../js/countries.js';
 
 export const SESSION_COOKIE = '__Host-ndl_session';
 export const STATE_COOKIE = '__Host-ndl_oauth_state';
+export const MODE_COOKIE = '__Host-ndl_oauth_mode'; // 'login' or 'link'
 export const SESSION_DAYS = 30;
 
 // Video hosts a record link may point to. Keeps mods from being sent to random sites.
@@ -221,10 +222,15 @@ export function avatarUrl(u) {
 
 export function publicUser(u) {
     const changedAt = u.name_changed_at || 0;
+    // Password-only accounts use a stand-in "local:..." Discord ID until they link Discord.
+    const linked = !!u.discord_id && !String(u.discord_id).startsWith('local:');
     return {
         name: u.name,
         nameVerified: !!u.name_verified,
-        discordUsername: u.discord_username,
+        username: u.username || null,
+        hasPassword: !!u.password_hash,
+        hasDiscord: linked,
+        discordUsername: linked ? u.discord_username : null,
         staff: !!u.staff,
         banned: !!u.banned,
         country: u.country || null,

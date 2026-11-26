@@ -3,6 +3,7 @@ import List from './pages/List.js';
 import Leaderboard from './pages/Leaderboard.js';
 import Roulette from './pages/Roulette.js';
 import Wheel from './pages/Wheel.js';
+import Login from './pages/Login.js';
 import Submit from './pages/Submit.js';
 import Review from './pages/Review.js';
 import Account from './pages/Account.js';
@@ -13,6 +14,7 @@ export default [
     { path: '/leaderboard', component: Leaderboard },
     { path: '/roulette', component: Roulette },
     { path: '/wheel', component: Wheel },
+    { path: '/login', component: Login },
     { path: '/submit', component: Submit },
     { path: '/review', component: Review },
     { path: '/account', component: Account },

@@ -42,7 +42,7 @@ export default {
                             </div>
                             <div class="review-info">
                                 <h2>{{ s.user }} — {{ s.percent }}% on {{ levelLabel(s.level) }}</h2>
-                                <p class="type-label-md">Discord: {{ s.discord_username }} · {{ s.hz }}Hz{{ s.mobile ? ' · Mobile' : '' }} · {{ ago(s.created_at) }}</p>
+                                <p class="type-label-md">{{ who(s) }} · {{ s.hz }}Hz{{ s.mobile ? ' · Mobile' : '' }} · {{ ago(s.created_at) }}</p>
                                 <p class="type-label-md">Needs {{ minFor(s.level) }}%+ · Current best on this level: {{ currentBest(s.level, s.user) }}</p>
                                 <p><a :href="s.link" target="_blank" rel="noopener noreferrer">Video link ↗</a>
                                    <template v-if="s.raw_footage"> · <a :href="s.raw_footage" target="_blank" rel="noopener noreferrer">Raw footage ↗</a></template></p>
@@ -61,7 +61,7 @@ export default {
                         <h2 v-if="renames.length">Name change requests</h2>
                         <section v-for="u in renames" :key="'r' + u.id" class="account-card">
                             <h2>{{ u.name }} → {{ u.pending_name }}</h2>
-                            <p class="type-label-md">Discord: {{ u.discord_username }} (ID {{ u.discord_id }}) · {{ u.accepted }} accepted record(s) on the site · asked {{ ago(u.pending_name_at) }}</p>
+                            <p class="type-label-md">{{ who(u) }} · {{ u.accepted }} accepted record(s) on the site · asked {{ ago(u.pending_name_at) }}</p>
                             <p v-if="u.newNameOnList" class="account-error">⚠ "{{ u.pending_name }}" already has records in the list files. Only approve if this account really is that player.</p>
                             <p v-if="u.oldNameOnList" class="account-error">⚠ "{{ u.name }}" has records in the list files (data/*.json). Those won't move automatically. Rename them in the files too if you approve.</p>
                             <div class="account-row">
@@ -74,7 +74,7 @@ export default {
                         <p class="account-card">These accounts picked a name that already has records on the list. Only confirm if you know the Discord account belongs to that player.</p>
                         <section v-for="u in claims" :key="u.id" class="account-card">
                             <h2>{{ u.name }}</h2>
-                            <p class="type-label-md">Discord: {{ u.discord_username }} (ID {{ u.discord_id }})</p>
+                            <p class="type-label-md">{{ who(u) }}</p>
                             <div class="account-row">
                                 <button class="account-btn" :disabled="busy" @click="userAction(u.id, 'verify-name')">Confirm it's them</button>
                                 <button class="account-btn account-btn--ghost" :disabled="busy" @click="userAction(u.id, 'reset-name')">Make them pick another name</button>
@@ -91,7 +91,7 @@ export default {
                                     <td><a :href="s.link" target="_blank" rel="noopener noreferrer">{{ levelLabel(s.level) }}</a></td>
                                     <td>{{ s.percent }}%</td>
                                     <td><span class="status" :class="'status--' + s.status">{{ s.status }}</span></td>
-                                    <td>{{ s.reviewer || s.reviewer_discord }}</td>
+                                    <td>{{ s.reviewer || s.reviewer_username || s.reviewer_discord }}</td>
                                     <td>{{ s.reason || '' }}</td>
                                     <td><button class="account-link" :disabled="busy" @click="decide(s, 'reopen')">undo</button></td>
                                 </tr>
@@ -126,6 +126,15 @@ export default {
     },
     methods: {
         embed: youtubeEmbed,
+        // How to identify the player: Discord if linked, otherwise their NDL username.
+        who(u) {
+            const discord = u.discord_id && !String(u.discord_id).startsWith('local:');
+            const parts = [];
+            if (discord) parts.push(`Discord: ${u.discord_username} (ID ${u.discord_id})`);
+            if (u.username) parts.push(`Username: ${u.username}`);
+            if (!discord) parts.push('No Discord linked');
+            return parts.join(' · ');
+        },
         async load() {
             this.loading = true;
             try {

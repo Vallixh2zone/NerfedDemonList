@@ -42,6 +42,18 @@ export async function logout() {
     }
 }
 
-export function login() {
+/** Opens the Log in page (Discord or username + password). */
+export function login(next) {
+    const query = next ? `?next=${encodeURIComponent(next)}` : '';
+    window.location.hash = `/login${query}`;
+}
+
+/** Log in (or sign up) with Discord. */
+export function discordLogin() {
     window.location.href = '/api/auth/login';
+}
+
+/** Add Discord to the account you're logged into. */
+export function linkDiscord() {
+    window.location.href = '/api/auth/login?link=1';
 }

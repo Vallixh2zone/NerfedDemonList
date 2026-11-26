@@ -14,8 +14,11 @@ export default {
 
                 <section v-else-if="!session.user" class="account-card">
                     <h1>Submit a record</h1>
-                    <p>Log in with Discord so all your records stay under one name. We only see your Discord username and ID.</p>
-                    <button class="account-btn" @click="login()">Log in with Discord</button>
+                    <p>Log in so all your records stay under one name. You can use Discord or a username and password.</p>
+                    <div class="account-row">
+                        <router-link class="account-btn" :to="{ path: '/login', query: { next: '/submit' } }">Log in</router-link>
+                        <router-link class="account-btn account-btn--ghost" :to="{ path: '/login', query: { mode: 'register', next: '/submit' } }">Create account</router-link>
+                    </div>
                 </section>
 
                 <section v-else-if="session.user.banned" class="account-card">
@@ -41,7 +44,7 @@ export default {
 
                 <section v-else-if="!session.user.nameVerified" class="account-card">
                     <h1>Waiting for a mod</h1>
-                    <p><strong>{{ session.user.name }}</strong> already has records on the list, so a mod needs to confirm this account is really you before you can submit. Ping a mod in the Discord with your Discord username (<strong>{{ session.user.discordUsername }}</strong>).</p>
+                    <p><strong>{{ session.user.name }}</strong> already has records on the list, so a mod needs to confirm this account is really you before you can submit. <template v-if="session.user.discordUsername">Ping a mod in the Discord with your Discord username (<strong>{{ session.user.discordUsername }}</strong>).</template><template v-else>Ping a mod in the Discord and tell them your NDL username (<strong>{{ session.user.username }}</strong>). Linking your Discord on your <router-link to="/account">Account page</router-link> makes it easier for them to check.</template></p>
                 </section>
 
                 <template v-else>
@@ -134,6 +137,8 @@ export default {
         'session.user': {
             handler(user) {
                 if (user && user.name && user.nameVerified) this.loadSubmissions();
+                // New username accounts: suggest their username as their player name.
+                if (user && !user.name && !this.nameInput) this.nameInput = user.username || '';
             },
             immediate: true,
         },

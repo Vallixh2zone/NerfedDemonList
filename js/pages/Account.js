@@ -1,5 +1,5 @@
 import { store } from '../main.js';
-import { session, api, login, logout, loadSession } from '../auth.js';
+import { session, api, login, logout, loadSession, linkDiscord } from '../auth.js';
 import { flagUrl } from '../util.js';
 import { COUNTRY_CODES } from '../countries.js';
 import Spinner from '../components/Spinner.js';
@@ -20,8 +20,8 @@ export default {
 
                 <section v-else-if="!session.user" class="account-card">
                     <h1>Your account</h1>
-                    <p>Log in with Discord to manage your profile.</p>
-                    <button class="account-btn" @click="login()">Log in with Discord</button>
+                    <p>Log in to manage your profile.</p>
+                    <router-link class="account-btn" :to="{ path: '/login', query: { next: '/account' } }">Log in</router-link>
                 </section>
 
                 <template v-else>
@@ -33,7 +33,7 @@ export default {
                                 <img v-if="session.user.country" class="flag flag-lg" :src="flagUrl(session.user.country)" :alt="session.user.country" />
                                 {{ session.user.name || 'No name yet' }}
                             </h1>
-                            <p class="type-label-md">Discord: {{ session.user.discordUsername }}<template v-if="session.user.staff"> · List mod</template></p>
+                            <p class="type-label-md">{{ signedInAs }}<template v-if="session.user.staff"> · List mod</template></p>
                         </div>
                     </section>
 
@@ -96,6 +96,68 @@ export default {
                         </label>
                     </section>
 
+                    <!-- Sign-in methods -->
+                    <section class="account-card">
+                        <h2>Ways to log in</h2>
+
+                        <div class="signin-method">
+                            <div class="signin-method__head">
+                                <h3>Username and password</h3>
+                                <span class="status" :class="session.user.hasPassword ? 'status--accepted' : 'status--off'">
+                                    {{ session.user.hasPassword ? 'On' : 'Off' }}
+                                </span>
+                            </div>
+                            <template v-if="session.user.hasPassword">
+                                <p>You log in as <strong>{{ session.user.username }}</strong>.</p>
+                                <button v-if="!pwOpen" class="account-link" @click="openPassword">Change password</button>
+                            </template>
+                            <template v-else>
+                                <p>Add a username and password so you can also log in without Discord.</p>
+                                <button v-if="!pwOpen" class="account-btn account-btn--ghost" @click="openPassword">Add a password</button>
+                            </template>
+
+                            <form v-if="pwOpen" class="account-form" @submit.prevent="savePassword">
+                                <label v-if="!session.user.hasPassword">
+                                    <span class="type-label-md">Username</span>
+                                    <input v-model.trim="pw.username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="24" required />
+                                </label>
+                                <label v-if="session.user.hasPassword">
+                                    <span class="type-label-md">Current password</span>
+                                    <input v-model="pw.current" type="password" autocomplete="current-password" maxlength="128" required />
+                                </label>
+                                <label>
+                                    <span class="type-label-md">New password</span>
+                                    <input v-model="pw.next" type="password" autocomplete="new-password" maxlength="128" required />
+                                </label>
+                                <label>
+                                    <span class="type-label-md">Confirm new password</span>
+                                    <input v-model="pw.confirm" type="password" autocomplete="new-password" maxlength="128" required />
+                                </label>
+                                <p class="type-label-md">At least 8 characters.<template v-if="session.user.hasPassword"> Changing it logs you out on your other devices.</template></p>
+                                <div class="account-row">
+                                    <button class="account-btn" :disabled="busy">{{ session.user.hasPassword ? 'Change password' : 'Add password' }}</button>
+                                    <button type="button" class="account-btn account-btn--ghost" @click="pwOpen = false">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="signin-method">
+                            <div class="signin-method__head">
+                                <h3>Discord</h3>
+                                <span class="status" :class="session.user.hasDiscord ? 'status--accepted' : 'status--off'">
+                                    {{ session.user.hasDiscord ? 'Linked' : 'Not linked' }}
+                                </span>
+                            </div>
+                            <template v-if="session.user.hasDiscord">
+                                <p>Linked to <strong>{{ session.user.discordUsername }}</strong>. You can log in with Discord too.</p>
+                            </template>
+                            <template v-else>
+                                <p>Link Discord to log in with it, show your Discord picture, and get pinged when your records are checked.</p>
+                                <button class="account-btn account-btn--ghost" @click="linkDiscord()">Link Discord</button>
+                            </template>
+                        </div>
+                    </section>
+
                     <!-- Sessions -->
                     <section class="account-card">
                         <h2>Log out</h2>
@@ -115,11 +177,20 @@ export default {
         country: '',
         newName: '',
         renameConfirm: false,
+        pwOpen: false,
+        pw: { username: '', current: '', next: '', confirm: '' },
         busy: false,
         saved: '',
         err: '',
     }),
     computed: {
+        signedInAs() {
+            const u = session.user;
+            const parts = [];
+            if (u.username) parts.push(`Username: ${u.username}`);
+            if (u.discordUsername) parts.push(`Discord: ${u.discordUsername}`);
+            return parts.join(' · ');
+        },
         cooldownText() {
             const next = session.user?.nextNameChange;
             if (!next || next * 1000 <= Date.now()) return '';
@@ -134,9 +205,36 @@ export default {
             immediate: true,
         },
     },
+    created() {
+        // Coming back from linking Discord
+        if (this.$route.query.linked) this.saved = 'Discord linked. You can now log in with Discord too.';
+        if (this.$route.query.error) this.err = this.$route.query.error;
+        if (this.$route.query.linked || this.$route.query.error) loadSession();
+    },
     methods: {
         login,
+        linkDiscord,
         flagUrl,
+        openPassword() {
+            this.pw = { username: session.user.username || '', current: '', next: '', confirm: '' };
+            this.pwOpen = true;
+        },
+        savePassword() {
+            if (this.pw.next !== this.pw.confirm) {
+                this.err = "The new passwords don't match.";
+                this.saved = '';
+                return;
+            }
+            const adding = !session.user.hasPassword;
+            const body = adding
+                ? { username: this.pw.username, newPassword: this.pw.next }
+                : { currentPassword: this.pw.current, newPassword: this.pw.next };
+            return this.run(async () => {
+                session.user = (await api('/api/account/password', { method: 'POST', body })).user;
+                this.pw = { username: '', current: '', next: '', confirm: '' };
+                this.pwOpen = false;
+            }, adding ? 'Password added. You can now log in with your username and password.' : 'Password changed.');
+        },
         async run(fn, okMessage) {
             this.busy = true;
             this.err = '';

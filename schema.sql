@@ -16,8 +16,20 @@ CREATE TABLE IF NOT EXISTS users (
     ping_on_review   INTEGER NOT NULL DEFAULT 1,
     pending_name     TEXT,                       -- requested new name, waiting for a mod
     pending_name_at  INTEGER,
-    name_changed_at  INTEGER
+    name_changed_at  INTEGER,
+    username         TEXT,                       -- sign-in name for username/password accounts
+    username_lower   TEXT,
+    password_hash    TEXT                        -- PBKDF2 hash; the password itself is never stored
 );
+-- Accounts made without Discord store "local:<random>" in discord_id until Discord is linked.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username ON users(username_lower);
+
+-- Failed logins and sign-ups, used to slow down password guessing. Rows older than a day are deleted.
+CREATE TABLE IF NOT EXISTS login_attempts (
+    key TEXT    NOT NULL,
+    at  INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_login_attempts ON login_attempts(key, at);
 
 CREATE TABLE IF NOT EXISTS sessions (
     token_hash TEXT    PRIMARY KEY,              -- SHA-256 of the cookie token, never the token itself

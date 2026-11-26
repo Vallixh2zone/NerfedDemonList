@@ -59,7 +59,7 @@ export async function onRequestPost({ request, env, params, waitUntil }) {
             notifyReview(env, {
                 ...s,
                 levelName: level?.data?.name || s.level,
-                reviewer: user.name || user.discord_username,
+                reviewer: user.name || user.username || user.discord_username,
             }),
         );
     }
